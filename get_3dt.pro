@@ -35,7 +35,7 @@
 ;                    2015/01/03 Spencer Hatch
 ;FILE:   @(#)get_3dt.pro	1.9
 ;-
-pro get_3dt,funct,get_dat,ERANGE=er,BINS=bins,NAME=name
+pro get_3dt,funct,get_dat,ERANGE=er,BINS=bins,NAME=name,t=t
 
 if n_params() lt 2 then begin
 	return
@@ -44,10 +44,10 @@ endif
 n=0
 ;max = 12000
 max = 30000
-t=0.D
+if not keyword_set(t) then t=0.D
 raw = call_function("get_"+get_dat,t)
 
-if not keyword_set(er) then er=[0,-1]
+;if not keyword_set(er) then er=[0,-1]
 if (not keyword_set(bins) and raw.valid eq 1) then begin
 	bins=bytarr(raw.nbins)
 	bins(*)=1

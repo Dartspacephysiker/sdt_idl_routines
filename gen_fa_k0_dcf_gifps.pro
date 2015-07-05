@@ -151,7 +151,7 @@ endelse
 nptypes = n_elements(ptypes)
 for j=1,nptypes do begin
     i = j-1
-    timespan,times(i),splot_time,/minutes
+    timespan,times(i),splot_time,/seconds
     get_fa_orbit,times(i),times(i)+splot_sec
     dcfile = dcnamebase+'_'+orbit_num+'_'+ptypes(i)
     if dcnames(0) then begin    ; produce DC page...

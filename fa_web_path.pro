@@ -84,7 +84,7 @@ FUNCTION fa_web_path, bp, t, dl, type, orb, ac, ext
 
    IF type NE 'ees' AND type NE 'ies' AND type NE 'dcf' AND type NE 'acf' $
      AND type NE 'tms' THEN BEGIN
-       PRINT, 'fa_web_path.pro: type parameter must be one of:
+       PRINT, 'fa_web_path.pro: type parameter must be one of:'
        PRINT, '   ees, ies, dcf, acf, tms'
        RETURN, 'INVALID'
    ENDIF
