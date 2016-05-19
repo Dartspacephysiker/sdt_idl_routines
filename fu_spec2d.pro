@@ -24,7 +24,7 @@
 ;CREATED BY:
 ;	J.McFadden	97/03/13
 ;LAST MODIFICATION:  97/03/13
-;MOD HISTORY:	
+;MOD HISTORY:	2016/05/13 S.Hatch added OUT_PARTIAL to get the diff. thing back
 ;
 ;NOTES:	  
 ;	Current version only works for FAST
@@ -36,7 +36,8 @@ pro fu_spec2d,funct,dat, $
 	ARANGE=ar, $
 	BINS=bins, $
 	INTEG_F = integ_f, $
-	INTEG_R = integ_r
+	INTEG_R = integ_r, $
+              OUT_PARTIAL=out_partial
 	
 if n_params() lt 2 then begin
 	print,'Wrong Format, Use: fu_spec2d,funct,dat,[ANGLE=angle,...]'
@@ -85,6 +86,8 @@ if keyword_set(integ_f) or keyword_set(integ_r) then begin
 		pmplot,data=plot2,overplot=1
 	endif
 endif 
+
+IF ARG_PRESENT(out_partial) THEN out_partial = y
 
 return
 end

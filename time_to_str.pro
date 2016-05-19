@@ -52,13 +52,15 @@
 ;
 ; REVISION HISTORY:
 ;
+;       2016/05/15 Added CONV_TO_UNDERSCORE
 ;	@(#)time_to_str.pro	1.1 31 Jul 1995
 ; 	Originally written by Jonathan M. Loran,  University of 
 ; 	California at Berkeley, Space Sciences Lab.   Jul. '95
 ;-
 
 
-FUNCTION time_to_str, secin, FMT=fmt, MSEC = msec, dateonly=dateonly
+FUNCTION time_to_str, secin, FMT=fmt, MSEC = msec, dateonly=dateonly, $
+                      CONV_TO_UNDERSCORE=conv_to_underscore
 
 ; make sure there are some elements in secin
 
@@ -81,6 +83,11 @@ FUNCTION time_to_str, secin, FMT=fmt, MSEC = msec, dateonly=dateonly
    if not keyword_set(msec) then fullstr = strmid(fullstr,0,19)
    if keyword_set(dateonly) then fullstr = strmid(fullstr,0,10)
 
+
+   IF KEYWORD_SET(conv_to_underscore) THEN BEGIN
+      fullstr = fullstr.REPLACE(':','_')
+      fullstr = fullstr.REPLACE('.','__')
+   ENDIF
 
    RETURN, fullstr
    

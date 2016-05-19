@@ -16,19 +16,19 @@
 ;	BINS:	bytarr(na,nb),	optional, energy/angle bins array for integration
 ;					0,1=exclude,include
 ;PURPOSE:
-;	Returns the field aligned flux, Jz, #/cm^2-sec, assumes a narrow (< 5 deg) field aligned beam
+;	Returns the field aligned flux, Jz, #/cm^2-sec for each energy, assumes a narrow (< 5 deg) field aligned beam
 ;NOTES:	
 ;	Similar to j_2d.pro, treats the anodes within 5 deg of the magnetic field differently.
 ;	Function normally called by "get_2dt.pro" to generate 
 ;	time series data for "tplot.pro".
 ;
 ;CREATED BY:
-;	J.McFadden	97-5-14		Created from j_2d.pro
-;					Treats narrow beams correctly, no do loops
+;	S.Hatch 	16-5-13		Created from j_2d_b.pro
+;
 ;LAST MODIFICATION:
 ;	97-5-14		J.McFadden
 ;-
-function j_2d_b,dat2,ENERGY=en,ERANGE=er,EBINS=ebins,ANGLE=an,ARANGE=ar,BINS=bins
+function j_2d_b_en,dat2,ENERGY=en,ERANGE=er,EBINS=ebins,ANGLE=an,ARANGE=ar,BINS=bins
 
 flux3dz = 0.
 
@@ -176,10 +176,10 @@ endif
 domega = domega1 + domega2
 
 sumdataz = total(data*domega,2)                    ;data and domega are 48x64 corresponding to energy and theta, so this gives a sum over thetas
-flux3dz = total((denergy*(energy^(-1)))*sumdataz)
+flux3dz_en = (denergy*(energy^(-1)))*sumdataz
 
 ; units are #/cm^2-sec
 
-return, flux3dz
+return, flux3dz_en
 end
 

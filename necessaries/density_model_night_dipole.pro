@@ -1,3 +1,23 @@
+;;2016/05/15
+;;Here are the variables that differ between dayside and nightside
+;;Night
+;;  nh=1000.0
+;;  no_FF=8.0e4
+;;  scale_upper_h=70.0
+;;  scale_upper_o_e=70.0
+;;  scale_upper_o_f=70.0
+;;  n_out_o=6000.0
+;;  scale_upper_out_o=400.
+
+;;day
+;;  nh=2000.0
+;;  no_FF=1.0e5
+;;  scale_upper_h=140.0
+;;  scale_upper_o_e=140.0
+;;  scale_upper_o_f=210.0
+;;  n_out_o=4000.0
+;;  scale_upper_out_o=600.
+
 function density_model_night_dipole,r
 ;used this function for dayside density profile using Chapman profiles
 
