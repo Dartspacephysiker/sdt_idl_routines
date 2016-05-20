@@ -67,7 +67,10 @@ pro get_2dt_ts_pot,funct,get_dat, $
         floor = floor, $
         CALIB = calib, $
         n_get_pts = n_get_pts,$
-        sc_pot=sc_pot
+        sc_pot=sc_pot, $
+        out_sc_pot=out_sc_pot, $
+        out_sc_time=out_sc_time, $
+        out_sc_min_energy_ind=out_sc_min_energy_ind
 
 ;	Time how long the routine takes
 ex_start = systime(1)
@@ -105,6 +108,15 @@ if dat(0).project_name eq 'FAST' then begin
 endif
 if not keyword_set(gap_time) then gap_time = default_gap_time
 
+if arg_present(out_sc_pot) then begin
+        get_sc_pot = 1
+        out_sc_pot = !NULL
+        out_sc_time = !NULL
+        out_sc_min_energy_ind = !NULL
+        energies    = dat[0].energy[*,0]
+endif else get_sc_pot = 0
+        
+
 
 if keyword_set(sc_pot) then begin
 	if routine EQ 'get_fa_ees_ts' or routine EQ 'get_fa_eeb_ts' then begin
@@ -130,6 +142,11 @@ if keyword_set(sc_pot) then begin
 			endelse
 		
 	endelse	
+
+        ;; if get_sc_pot then begin
+        ;;                out_sc_pot  = [out_sc_pot,energy_sc_pot[0]]
+        ;;                out_sc_time = [out_sc_time,sc_pot.x[ind]]
+        ;; endif
 endif else begin
 	
 		
@@ -181,6 +198,12 @@ if (dat(arr_idx).valid eq 1) then begin
 			energy_sc_pot=en
 		endelse
 	endelse	
+
+        if get_sc_pot then begin
+                       out_sc_pot  = [out_sc_pot,energy_sc_pot[0]]
+                       out_sc_time = [out_sc_time,sc_pot.x[ind]]
+                       out_sc_min_energy_ind = [out_sc_min_energy_ind,MAX(WHERE(energies GT energy_sc_pot[0]))]
+        endif
 endif else begin
 	energy_sc_pot=en
 endelse
