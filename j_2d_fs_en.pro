@@ -38,7 +38,7 @@ if dat.valid eq 0 then begin
 endif
 
 if dat.nbins eq 32 or dat.project_name ne 'FAST' then begin
-	return, j_2d_b(dat,ENERGY=en,ERANGE=er,EBINS=ebins,ANGLE=an,ARANGE=ar,BINS=bins)
+	return, j_2d_b_en(dat,ENERGY=en,ERANGE=er,EBINS=ebins,ANGLE=an,ARANGE=ar,BINS=bins)
 endif
 
 ind1=findgen(32)*2

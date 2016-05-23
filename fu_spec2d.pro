@@ -30,14 +30,15 @@
 ;	Current version only works for FAST
 ;-
 pro fu_spec2d,funct,dat, $
-	PSYM = psym, $
-	LIMITS = limits, $
-	ANGLE=an, $
-	ARANGE=ar, $
-	BINS=bins, $
-	INTEG_F = integ_f, $
-	INTEG_R = integ_r, $
-              OUT_PARTIAL=out_partial
+              PSYM = psym, $
+              LIMITS = limits, $
+              ANGLE=an, $
+              ARANGE=ar, $
+              BINS=bins, $
+              INTEG_F = integ_f, $
+              INTEG_R = integ_r, $
+              OUT_PARTIAL=out_partial, $
+              NOPLOT=noPlot
 	
 if n_params() lt 2 then begin
 	print,'Wrong Format, Use: fu_spec2d,funct,dat,[ANGLE=angle,...]'
@@ -58,11 +59,15 @@ endif
 title = dat.project_name+'  '+dat.data_name+' '+funct
 ytitle='Differential '+funct
 xtitle='Energy (eV)'
-plot={title:title, $
-     xtitle:xtitle,x:x,xlog:1, $
-     ytitle:ytitle,y:y,ylog:1  }
-pmplot,data=plot,limits=limits
+
+IF ~KEYWORD_SET(noPlot) THEN BEGIN
+   plot={title:title, $
+         xtitle:xtitle,x:x,xlog:1, $
+         ytitle:ytitle,y:y,ylog:1  }
+   pmplot,data=plot,limits=limits
+
 if keyword_set(psym) then oplot,x,y,psym=psym
+ENDIF
 
 if keyword_set(integ_f) or keyword_set(integ_r) then begin
 	ar1=fltarr(nenergy,nenergy)
@@ -73,17 +78,21 @@ if keyword_set(integ_f) or keyword_set(integ_r) then begin
 	endfor
 	if keyword_set(integ_f) then begin
 		y1=ar1#y
-		plot1={title:title, $
-		xtitle:xtitle,x:x,xlog:1, $
-		ytitle:ytitle,y:y1,ylog:1  }
-		pmplot,data=plot1,overplot=1
+                IF ~KEYWORD_SET(noPlot) THEN BEGIN
+                   plot1={title:title, $
+                          xtitle:xtitle,x:x,xlog:1, $
+                          ytitle:ytitle,y:y1,ylog:1  }
+                   pmplot,data=plot1,overplot=1
+                ENDIF
 	endif
 	if keyword_set(integ_r) then begin
 		y2=ar2#y
-		plot2={title:title, $
-		xtitle:xtitle,x:x,xlog:1, $
-		ytitle:ytitle,y:y2,ylog:1  }
-		pmplot,data=plot2,overplot=1
+                IF ~KEYWORD_SET(noPlot) THEN BEGIN
+                   plot2={title:title, $
+                          xtitle:xtitle,x:x,xlog:1, $
+                          ytitle:ytitle,y:y2,ylog:1  }
+                   pmplot,data=plot2,overplot=1
+                ENDIF
 	endif
 endif 
 

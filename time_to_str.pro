@@ -87,6 +87,7 @@ FUNCTION time_to_str, secin, FMT=fmt, MSEC = msec, dateonly=dateonly, $
    IF KEYWORD_SET(conv_to_underscore) THEN BEGIN
       fullstr = fullstr.REPLACE(':','_')
       fullstr = fullstr.REPLACE('.','__')
+      fullstr = fullstr.REPLACE('/','-')
    ENDIF
 
    RETURN, fullstr
