@@ -43,8 +43,9 @@
 ;
 ;CREATED BY:
 ;	J.McFadden
-;LAST MODIFICATION:  97/05/16
+;LAST MODIFICATION:  16/05/23
 ;MOD HISTORY:	
+;               16/05/23        Added AVG_INTERVAL keyword to specify the number of structs to average
 ;		97/05/16	Variation on get_2dt.pro that uses get_*_ts.pro routines
 ;
 ;NOTES:	  
@@ -59,6 +60,7 @@ pro get_2dt_ts,funct,get_dat, $
 	ANGLE=an, $
 	ARANGE=ar, $
 	BINS=bins, $
+        avg_interval=avg_interval, $
 	gap_time=gap_time, $ 
 	no_data=no_data, $
         name  = name, $
@@ -94,6 +96,13 @@ endelse
 
 if dat(0).valid eq 0 then begin no_data = 1 & return & end $
 else no_data = 0
+
+if keyword_set(avg_interval) then begin
+        dat = average_sum3d(dat,avg_interval)
+        data_idx_inc = avg_interval
+endif else begin
+        data_idx_inc = 1
+endelse
 
 ytitle = funct+"_"+get_dat
 last_time = (dat(0).time+dat(0).end_time)/2.
@@ -143,13 +152,16 @@ endif else begin
 endelse
 
         arr_idx=arr_idx+1
-        data_idx=data_idx+1
+        data_idx=data_idx+data_idx_inc
 
         ; get new data if beyond cache array
 
         if data_idx gt dat(0).en_index then begin
             dat = call_function(routine,CALIB=calib,idxst=data_idx,npts=n_get_pts)  
             arr_idx = 0
+            if keyword_set(avg_interval) and dat(0).valid then begin
+               dat = average_sum3d(dat,avg_interval)
+            endif
         endif
 
         ; If we are beyond the end of the cache here, or beyond the end time
