@@ -72,7 +72,10 @@ pro spec2d,tempdat,   $
 	XMARGIN = xmargin, $
 	YMARGIN = ymargin, $
 	THICK = thick, $
-	PSYM = psym
+	PSYM = psym, $
+        no_plot = no_plot, $
+        out_dat = out_dat;; , $
+        ;; out_angles = out_angles
 
 if data_type(tempdat) ne 8 or tempdat.valid eq 0 then begin
   print,'Invalid Data'
@@ -215,11 +218,20 @@ plot={title:title, $
 
 if keyword_set(error_bars) then add_str_element,plot,'dy',dydat
 
-mplot,data=plot,limits=limits2,OVERPLOT=oplot,COLORS=shades
-if keyword_set(psym) then oplot,xdat,ydat,psym=psym
+if ~keyword_set(no_plot) then begin
+      mplot,data=plot,limits=limits2,OVERPLOT=oplot,COLORS=shades
+      if keyword_set(psym) then oplot,xdat,ydat,psym=psym
+endif
+
+
+if arg_present(out_dat) then out_dat = {x:xdat, $
+                                        y:ydat, $
+                                        angles:theta(i), $
+                                        time:MEAN([data3d.time,data3d.end_time])}
+;; if arg_present(out_angles) then out_angles = theta(i)
 
 !y.omargin = [0,0]
-time_stamp
+if ~keyword_set(no_plot) then time_stamp
 
 return
 end
