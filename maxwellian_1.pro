@@ -40,6 +40,8 @@ common fit_mass,mass2
 ; errors. 
 if not defined(f_units) then units = 'eflux'
 
+;; mass2 = 5.6856602e-06*1.6e-22
+
 ; Get initial estimate of "a" before calling curvefit.pro
 if keyword_set(ind) then begin
 	f0=f(ind(0))

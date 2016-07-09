@@ -71,7 +71,10 @@ pro funct_fit2d,dat, $
                 LABEL = label, $
                 SUMPLT = sumplt, $
                 MSEC = msec, $
-                EBARS = ebars
+                EBARS = ebars, $
+                NO_PLOT = no_plot, $
+                OUT_FIT = out_fit
+
 common fit_mass,mass
 
 ; Exit if no data
@@ -230,6 +233,9 @@ print,'curvefit chi2=',chi2
 chi2_2 = total((yfit-cfit)^2*wfit)/(n_elements(yfit) - $
                                     N_elements(afit))
 print,'FUNCT_FIT2d: CHI2 = '+strcompress(string(chi2_2), /remove_all)
+t_arr = !null
+f0_arr = !null
+dens_arr = !null
 if tfmaxwellian then begin
     for m=0,nfitf-1 do begin
         print,' Population',m
@@ -238,8 +244,14 @@ if tfmaxwellian then begin
         print,' source density =', $
           afit(2*m)*exp(afit(2*m+1)*xx(0))*1.e-15 * $
           (-1.*2.*3.1416*1.6e-12/(afit(2*m+1)*(mass)))^1.5 
+
+        ;;Get fit info for outputs
+        t_arr = [t_arr,-1./afit(2*m+1)]
+        f0_arr = [f0_arr,afit(2*m)]
+        dens_arr = [dens_arr,afit(2*m)*exp(afit(2*m+1)*xx(0))*1.e-15 * (-1.*2.*3.1416*1.6e-12/(afit(2*m+1)*(mass)))^1.5]
     endfor
 endif
+
 if fitf eq 'maxwellian_beam' then print,'Vo = ',afit(2)
 ; Add the fit to the plot
 ;
@@ -260,6 +272,18 @@ endif else begin
     spec2d,dat, units=f_units, limits=limits, color=color, label=label, $
       msec=msec, angle=an, arange=ar, bins=bins
 endelse
+
+out_fit = {x:xvars, $
+           y:cfit, $
+           a:afit, $
+           t_arr:t_arr, $
+           f0_arr:f0_arr, $
+           dens_arr:dens_arr, $
+           weights:wvar, $
+           chi2_2:chi2_2, $
+           chi2:chi2}
+
+if keyword_set(no_plot) then return
 
 if keyword_set(ebars) then begin
     error_high = tmpdat.data + tmpdat.ddata

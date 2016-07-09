@@ -36,7 +36,7 @@
 ;	n_get_pts: 	Number of points in the array of structures formed by get_"data_str"_ts, default=200.
 ;
 ;PURPOSE:
-;	To generate time series data for "tplot.pro" 
+;	To generate time series data for "tplot.pro" This uses the NEGATIVE of the s/c potential to set the minimum energy.
 ;NOTES:	
 ;	Program names time series data to funct+"_"+get_dat if NAME keyword not set
 ;		See 'tplot_names.pro'.
