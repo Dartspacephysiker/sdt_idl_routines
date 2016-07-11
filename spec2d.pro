@@ -74,8 +74,8 @@ pro spec2d,tempdat,   $
 	THICK = thick, $
 	PSYM = psym, $
         no_plot = no_plot, $
-        out_dat = out_dat;; , $
-        ;; out_angles = out_angles
+        out_dat = out_dat, $;; , $
+        out_fastStr=out_fastStr            ;; out_angles = out_angles
 
 if data_type(tempdat) ne 8 or tempdat.valid eq 0 then begin
   print,'Invalid Data'
@@ -228,6 +228,36 @@ if arg_present(out_dat) then out_dat = {x:xdat, $
                                         y:ydat, $
                                         angles:theta(i), $
                                         time:MEAN([data3d.time,data3d.end_time])}
+
+if arg_present(out_fastStr) then begin
+
+   out_fastStr = {data_name:data3d.data_name, $
+                  valid:data3d.valid, $
+                  project_name:data3d.project_name, $
+                  units_name:data3d.units_name, $
+                  units_procedure:data3d.units_procedure, $
+                  time:data3d.time, $
+                  end_time:data3d.end_time, $
+                  integ_t:data3d.integ_t, $
+                  nbins:N_ELEMENTS(bins2), $
+                  nenergy:data3d.nenergy, $
+                  data:ydat, $
+                  ddata:dydat, $
+                  energy:xdat, $
+                  theta:data3d.theta[*,i], $
+                  geom:data3d.geom, $
+                  denergy:data3d.denergy[*,i], $
+                  dtheta:data3d.dtheta, $
+                  eff:data3d.eff, $
+                  mass:data3d.mass, $
+                  geomfactor:data3d.geomfactor, $
+                  header_bytes:data3d.header_bytes, $
+                  st_index:data3d.st_index, $
+                  en_index:data3d.en_index, $
+                  npts:data3d.npts, $
+                  index:data3d.index}
+
+endif
 ;; if arg_present(out_angles) then out_angles = theta(i)
 
 !y.omargin = [0,0]
