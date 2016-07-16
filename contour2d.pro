@@ -71,6 +71,7 @@ pro contour2d,tempdat,   $
 	LAB_180 = lab_180, $
 	LAB_90 = lab_90, $
 	LAB_0 = lab_0, $
+        OVERPLOT = overplot, $
 	XMARGIN = xmargin, $
 	YMARGIN = ymargin
 
@@ -326,7 +327,8 @@ if keyword_set(polar) then begin
     polar_contour, zdat, ydat, xdat, title=title, xtitle=xtitle, $
       ytitle=ytitle, c_colors=c_colors, levels=levels, fill=fill, $
       xrange=xrange, yrange=yrange, ystyle=ystyle, xstyle=xstyle, $
-      xmargin=xmargin,ymargin=ymargin
+      xmargin=xmargin,ymargin=ymargin, $
+      overplot=overplot
 
 endif else begin
 
@@ -340,12 +342,14 @@ endif else begin
         contour, zdat, ydat, xdat, title=title, xtitle=ytitle, ytitle=xtitle, $
           c_colors=c_colors, levels=levels, yrange=xrange, ystyle=xstyle, $
           ylog=xlog, xrange=yrange, xstyle=ystyle, xlog=ylog, $
-	  fill=fill, xmargin=xmargin, ymargin=ymargin, xticks=yticks, xtickv=ytickv
+	  fill=fill, xmargin=xmargin, ymargin=ymargin, xticks=yticks, xtickv=ytickv, $
+          overplot=overplot
     endif else begin
         contour, zdat, xdat, ydat, title=title, xtitle=xtitle, ytitle=ytitle, $
           c_colors=c_colors, levels=levels, yrange=yrange, ystyle=ystyle, $
           ylog=ylog, xrange=xrange, xstyle=xstyle, xlog=xlog, $
-          fill=fill, xmargin=xmargin, ymargin=ymargin, yticks=yticks, ytickv=ytickv
+          fill=fill, xmargin=xmargin, ymargin=ymargin, yticks=yticks, ytickv=ytickv, $
+          overplot=overplot
     endelse
 endelse
 
