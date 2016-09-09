@@ -273,15 +273,15 @@ endif else begin
       msec=msec, angle=an, arange=ar, bins=bins
 endelse
 
-out_fit = {x:xvars, $
-           y:cfit, $
-           a:afit, $
-           t_arr:t_arr, $
-           f0_arr:f0_arr, $
-           dens_arr:dens_arr, $
-           weights:wvar, $
-           chi2_2:chi2_2, $
-           chi2:chi2}
+;; out_fit = {x:xvars, $
+;;            y:cfit, $
+;;            a:afit, $
+;;            t_arr:t_arr, $
+;;            f0_arr:f0_arr, $
+;;            dens_arr:dens_arr, $
+;;            weights:wvar, $
+;;            chi2_2:chi2_2, $
+;;            chi2:chi2}
 
 if keyword_set(no_plot) then return
 

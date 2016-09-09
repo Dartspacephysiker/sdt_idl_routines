@@ -6,7 +6,7 @@ device, get_graphics = old, set_graphics = 6  ;Set xor
 if not keyword_set(color) then color = !d.n_colors -1
 if not keyword_set(legend) then $
   legend = [!d.x_size-22*!d.x_ch_size,!d.y_size-6*!d.y_ch_size] $
-else legend = convert_coord(legend(0),legend(1),/data,/to_dev)
+else legend = convert_coord(legend[0],legend[1],/data,/to_dev)
 
 flag  = 0 
 
@@ -39,8 +39,8 @@ while 1 do begin
   endif 
   plots,[0,!d.x_size-1],[py,py], color=color, /dev, thick=1, lines=0 
   plots,[px,px],[0,!d.y_size-1], color=color, /dev, thick=1, lines=0 
-  xyouts,legend(0),legend(1),                  s1, color=color, /dev, size=1.4
-  xyouts,legend(0),legend(1) - 3*!d.y_ch_size, s2, color=color, /dev, size=1.4
+  xyouts,legend[0],legend[1],                  s1, color=color, /dev, size=1.4
+  xyouts,legend[0],legend[1] - 3*!d.y_ch_size, s2, color=color, /dev, size=1.4
   empty				;Decwindow bug
   if !err eq 2 then begin ;move legend
     legend = [xd,yd]
@@ -58,8 +58,8 @@ middle:
   plots,[px,px],[0,!d.y_size-1], color=color, /dev, thick=1, lines=0 
   s1 = string('x:',data(0))
   s2 = string('y:',data(1))
-  xyouts,legend(0),legend(1),                  s1, color=color, /dev, size=1.4
-  xyouts,legend(0),legend(1) - 3*!d.y_ch_size, s2, color=color, /dev, size=1.4
+  xyouts,legend[0],legend[1],                  s1, color=color, /dev, size=1.4
+  xyouts,legend[0],legend[1] - 3*!d.y_ch_size, s2, color=color, /dev, size=1.4
   wait, .01                      ;Dont hog it all
 endwhile
 end

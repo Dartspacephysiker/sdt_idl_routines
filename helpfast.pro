@@ -26,7 +26,7 @@
 ;-
 pro helpfast, mosaic = mosaic, noinstall=noinstall
 
-if keyword_set(mosaic) then browser = 'Mosaic ' else browser = 'netscape '
+if keyword_set(mosaic) then browser = 'Mosaic ' else browser = 'chromium-browser '
 if not keyword_set(noinstall) and not keyword_set(mosaic) then begin
     browser = browser + ' -install '
 endif
