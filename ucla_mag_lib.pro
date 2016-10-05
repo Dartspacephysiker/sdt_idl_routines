@@ -755,7 +755,7 @@ endif else begin
     endelse
 endelse
 
-com = 'egrep -v "^#" '+fname+'|grep -i -c "epoch time"
+com = 'egrep -v "^#" '+fname+'|grep -i -c "epoch time"'
 spawn,com,result
 reads,result(0),n_epochs
 
@@ -1114,7 +1114,7 @@ if magdc.valid eq 0 then begin
       print,'This procedure needs magnetometer data quantities'
       print,'Please make sure the following Fields-Survey'
       print,'quantities are displayed in SDT: '
-      print,'   either:  MagXDC, MagYDC, MagZDC
+      print,'   either:  MagXDC, MagYDC, MagZDC'
       print,'   or:      Mag1dc_S, Mag2dc_s, Mag3dc_S'
       print,'   or:      MagX, MagY, MagZ'
       print,''
@@ -1380,13 +1380,13 @@ if (n_tags(cal_hist) ne 0) then begin
 ;
         if (keyword_set(no_recal)) then begin
           do_recal=0
-          print,string("07b)
+          print,string(BYTE('07'O))
           print,'WARNING - Data out of range of Calibration file'
           print,'' 
         endif else begin
           do_recal=1
           no_recal=0
-          print,string("07b)
+          print,string(BYTE('07'O))
           print,'CAUTION - Data out of range of Calibration file'
           print,'Additional "on-the-fly" calibration will be done'
           print,'' 
@@ -1421,7 +1421,7 @@ if (n_tags(cal_hist) ne 0) then begin
             print,''
             print,'Interpolating Calibration Data to Orbit',norb_ref
             if (magz_time(n_elements(magz_time)-1L)-magz_time(0) gt 1.1 * tperorb) then begin
-                print,string("07b)
+                print,string(BYTE('07'O))
                 print,'WARNING - data spans more than one orbit'
                 print,'  Calibration determined for median orbit'
             endif
@@ -1443,7 +1443,7 @@ if (n_tags(cal_hist) ne 0) then begin
       endif
     endelse
     if (magz_time(0) gt ref_9937 and cal_hist.t(nb-1) lt ref_9937) then begin
-        print,string("07b)
+        print,string(BYTE('07'O))
         print,'WARNING - Orbit > 9936, Using Interim Calibration'
         print,'' 
         tw(0,0) =  0.994810d0 ; = tw_xx
@@ -1466,7 +1466,7 @@ if (n_tags(cal_hist) eq 0) then begin
 
     if (magz_time(0) gt ref_9937) then begin
 
-        print,string("07b)
+        print,string(BYTE('07'O))
         print,'WARNING - Orbit > 9936, Using Interim Calibration'
         print,'' 
         tw(0,0) =  0.994810d0 ; = tw_xx
@@ -1515,16 +1515,16 @@ ref_8431 = str_to_time('1998-10-09/06:21:17')
 
 if strcompress(cal_mess,/remove_all) eq '' then begin
   if (magz_time(0) gt ref_9200 and magz_time(0) lt ref_9937) then begin
-    print,string("07b)
+    print,string(BYTE('07'O))
     print,'DANGER - Orbit >= 9200, < 9937: P12S7V Under voltage - BAD ADC GAIN'
     print,'' 
   endif else if (magz_time(0) gt ref_8431 and magz_time(0) le ref_9200) then begin
-    print,string("07b)
+    print,string(BYTE('07'O))
     print,'WARNING - Orbit >= 8431: P12S7V Under voltage'
     print,'' 
   endif
 endif else begin
-  print,string("07b)
+  print,string(BYTE('07'O))
   print,cal_mess
   print,'' 
 endelse
@@ -1958,7 +1958,7 @@ if (nz gt 0) then begin
       !p.charsize=0.
 
       ans=''
-      print,string("07b)
+      print,string(BYTE('07'O))
       read,ans,prompt='Is it ok to subtract torquer offsets? '
       ans=strmid(ans,0,1)
 
@@ -2121,7 +2121,7 @@ IN_ECLIPSE = 2
 NOT_SMOOTHED = 4
 MISSING = 16
 
-bell = string("07b)
+bell = string(BYTE('07'O))
 
 bfin = where (finite(frq.x) and finite(frq.y), nfin)
 if (nfin eq 0) then begin
@@ -2802,7 +2802,7 @@ function transform_vector,trans,in_vec,inverse=inverse
 n_arr = n_elements(trans(*,0,0))
 n_vec = n_elements(in_vec(*,0))
 if (n_vec ne n_arr) then begin
-   print,string("07b)
+   print,string(BYTE('07'O))
    print,'TRANSFORM_VECTOR - dimension mismatch'
    print,''
    return,0

@@ -614,7 +614,7 @@ if (develop) then no_store_old=0
 rem_spin_har=1
 if (keyword_set(no_spin_tone)) then rem_spin_har=0
 
-bell = string("07b)
+bell = string(BYTE('07'O))
 no_model = -1
 rgb=[6,4,2]
 if keyword_set(vec_cols) then if (n_elements(vec_cols) eq 3) then rgb=vec_cols
@@ -677,7 +677,7 @@ endif
 
 next_clock = systime(1)
 if (timer) then print, $
-   string("13b)+'Getting magnetometer data [STEPS 1-3] took ', $
+   string(BYTE('13'O))+'Getting magnetometer data [STEPS 1-3] took ', $
    next_clock-last_clock,' seconds'
 last_clock=next_clock
 
@@ -742,7 +742,7 @@ if (calctorq ne 0) then begin
 
           next_clock = systime(1)
           if (timer) then print, $
-              string("13b)+'Getting torquer coil offsets [STEP 4] took ', $
+              string(BYTE('13'O))+'Getting torquer coil offsets [STEP 4] took ', $
               next_clock-last_clock,' seconds'
           last_clock=next_clock
 
@@ -856,9 +856,9 @@ ofst_new(0)=o_0
 ofst_new(1)=o_1
 ofst_new(2)=o_2
 
-print,tw_new(*,0),format="(f9.6,3x,f9.6,3x,f9.6)
-print,tw_new(*,1),format="(f9.6,3x,f9.6,3x,f9.6)
-print,tw_new(*,2),format="(f9.6,3x,f9.6,3x,f9.6)
+print,tw_new(*,0),format='(f9.6,3x,f9.6,3x,f9.6)'
+print,tw_new(*,1),format='(f9.6,3x,f9.6,3x,f9.6)'
+print,tw_new(*,2),format='(f9.6,3x,f9.6,3x,f9.6)'
 print,''
 
 
@@ -977,7 +977,7 @@ if (rem_spin_har) then begin
 
    next_clock_rem = systime(1)
    if (timer) then print, $
-      string("13b)+'Spin-tone harmonic removal took ', $
+      string(BYTE('13'O))+'Spin-tone harmonic removal took ', $
       next_clock_rem-last_clock_rem,' seconds'
 
 endif
@@ -1067,7 +1067,7 @@ ylim,'Bz_sp',-3000,3000
 
 next_clock = systime(1)
 if (timer) then print, $
-   string("13b)+'Time-varying tweak of magnetometer data [STEPS 5-8] took ', $
+   string(BYTE('13'O))+'Time-varying tweak of magnetometer data [STEPS 5-8] took ', $
    next_clock-last_clock,' seconds'
 last_clock=next_clock
 last_clock_tmp=next_clock
@@ -1123,7 +1123,7 @@ if (old_igrf eq 0) then get_new_igrf,no_store_old=no_store_old,use_igrf7=use_igr
 
 next_clock = systime(1)
 if (timer) then print, $
-   string("13b)+'Getting orbit data took ', $
+   string(BYTE('13'O))+'Getting orbit data took ', $
    next_clock-last_clock_tmp,' seconds'
    last_clock_tmp=next_clock
 
@@ -1267,7 +1267,7 @@ endif
 
 next_clock = systime(1)
 if (timer) then print, $
-   string("13b)+'Patching spin phase took ', $
+   string(BYTE('13'O))+'Patching spin phase took ', $
    next_clock-last_clock_tmp,' seconds'
 last_clock_tmp=next_clock
 
@@ -1288,11 +1288,11 @@ if (nbad gt 0) then mag_flags.x(bbad)=nadir_zero(bbad)
 
 next_clock = systime(1)
 if (timer) then print, $
-   string("13b)+'Fixing spin phase took ', $
+   string(BYTE('13'O))+'Fixing spin phase took ', $
    next_clock-last_clock_tmp,' seconds'
 last_clock_tmp=next_clock
 if (timer) then print, $
-   string("13b)+'Patching and smoothing spin phase [STEP 9] took ', $
+   string(BYTE('13'O))+'Patching and smoothing spin phase [STEP 9] took ', $
    next_clock-last_clock,' seconds'
 last_clock=next_clock
 
@@ -1302,7 +1302,7 @@ phs_int = interpolate_phase(phs,frq,bz_sp)
 
 next_clock = systime(1)
 if (timer) then print, $
-   string("13b)+'Interpolating spin phase took ', $
+   string(BYTE('13'O))+'Interpolating spin phase took ', $
    next_clock-last_clock_tmp,' seconds'
 last_clock_tmp=next_clock
 
@@ -1337,7 +1337,7 @@ endif
 
 next_clock = systime(1)
 if (timer) then print, $
-   string("13b)+'Storing data quality flags took ', $
+   string(BYTE('13'O))+'Storing data quality flags took ', $
    next_clock-last_clock_tmp,' seconds'
 last_clock_tmp=next_clock
 
@@ -1367,7 +1367,7 @@ endif
 
 next_clock = systime(1)
 if (timer) then print, $
-   string("13b)+'Despinning magnetometer data took ', $
+   string(BYTE('13'O))+'Despinning magnetometer data took ', $
    next_clock-last_clock_tmp,' seconds'
 last_clock_tmp=next_clock
 
@@ -1497,11 +1497,11 @@ o_y=0.
 
 next_clock = systime(1)
 if (timer) then print, $
-   string("13b)+'Storing of tplot variables took ', $
+   string(BYTE('13'O))+'Storing of tplot variables took ', $
    next_clock-last_clock_tmp,' seconds'
 last_clock_tmp=next_clock
 if (timer) then print, $
-   string("13b)+'Magnetometer interim despin and tplot store [STEP 10] took ', $
+   string(BYTE('13'O))+'Magnetometer interim despin and tplot store [STEP 10] took ', $
    next_clock-last_clock,' seconds'
 last_clock=next_clock
 
@@ -1699,7 +1699,7 @@ if no_model eq 0 then begin
 
     next_clock = systime(1)
     if (timer) then print, $
-        string("13b)+'Initial determination of spin-axis pointing took ', $
+        string(BYTE('13'O))+'Initial determination of spin-axis pointing took ', $
         next_clock-last_clock_tmp,' seconds'
     last_clock_tmp=next_clock
 
@@ -1865,7 +1865,7 @@ if no_model eq 0 then begin
 
     next_clock = systime(1)
     if (timer) then print, $
-        string("13b)+'Recalculating despun_to_gei [STEP 11] took ', $
+        string(BYTE('13'O))+'Recalculating despun_to_gei [STEP 11] took ', $
         next_clock-last_clock,' seconds'
     last_clock=next_clock
     last_clock_tmp=next_clock
@@ -2043,7 +2043,7 @@ if no_model eq 0 then begin
 
     next_clock = systime(1)
     if (timer) then print, $
-        string("13b)+'Smoothing and respinning magnetometer data [STEP 12] took ', $
+        string(BYTE('13'O))+'Smoothing and respinning magnetometer data [STEP 12] took ', $
         next_clock-last_clock,' seconds'
     last_clock=next_clock
     last_clock_tmp=next_clock
@@ -2135,7 +2135,7 @@ if no_model eq 0 then begin
 
     next_clock = systime(1)
     if (timer) then print, $
-        string("13b)+'Initial spin phase adjustment [STEP 13] took ', $
+        string(BYTE('13'O))+'Initial spin phase adjustment [STEP 13] took ', $
         next_clock-last_clock,' seconds'
     last_clock=next_clock
     last_clock_tmp=next_clock
@@ -2387,7 +2387,7 @@ if no_model eq 0 then begin
 
     next_clock = systime(1)
     if (timer) then print, $
-        string("13b)+'Final attitude corrections [STEP 14] took ', $
+        string(BYTE('13'O))+'Final attitude corrections [STEP 14] took ', $
         next_clock-last_clock,' seconds'
     last_clock=next_clock
     last_clock_tmp=next_clock
@@ -2410,7 +2410,7 @@ if no_model eq 0 then begin
 
     next_clock = systime(1)
     if (timer) then print, $
-        string("13b)+"Getting Delta-B's in spacecraft coordinates took ", $
+        string(BYTE('13'O))+"Getting Delta-B's in spacecraft coordinates took ", $
         next_clock-last_clock_tmp,' seconds'
     last_clock_tmp=next_clock
 
@@ -2453,7 +2453,7 @@ if no_model eq 0 then begin
 
     next_clock = systime(1)
     if (timer) then print, $
-        string("13b)+"Getting Delta-B's in GEI coordinates took ", $
+        string(BYTE('13'O))+"Getting Delta-B's in GEI coordinates took ", $
         next_clock-last_clock_tmp,' seconds'
     last_clock_tmp=next_clock
 
@@ -2515,7 +2515,7 @@ if no_model eq 0 then begin
 
     next_clock = systime(1)
     if (timer) then print, $
-        string("13b)+"Getting Delta-B's in SM coordinates took ", $
+        string(BYTE('13'O))+"Getting Delta-B's in SM coordinates took ", $
         next_clock-last_clock_tmp,' seconds'
     last_clock_tmp=next_clock
 
@@ -2570,7 +2570,7 @@ if no_model eq 0 then begin
 
     next_clock = systime(1)
     if (timer) then print, $
-        string("13b)+"Getting Delta-B's in field-aligned coordinates took ", $
+        string(BYTE('13'O))+"Getting Delta-B's in field-aligned coordinates took ", $
         next_clock-last_clock_tmp,' seconds'
     last_clock_tmp=next_clock
 
@@ -2634,7 +2634,7 @@ if no_model eq 0 then begin
 
     next_clock = systime(1)
     if (timer) then print, $
-      string("13b) + $
+      string(BYTE('13'O)) + $
       "Getting Delta-B's in field-aligned, velocity-based coordinates took ", $
         next_clock-last_clock_tmp,' seconds'
     last_clock_tmp=next_clock
@@ -2668,7 +2668,7 @@ endelse
 
 next_clock = systime(1)
 if (timer) then print, $
-   string("13b) + $
+   string(BYTE('13'O)) + $
    "Transforming and storing magnetometer data [STEP 15] took ", $
     next_clock-last_clock,' seconds'
 
@@ -2704,7 +2704,7 @@ print,''
 
 if (timer) then print, $
    "UCLA_MAG_DESPIN took ", $
-   systime(1)-clock_time,' seconds'+string("13b)
+   systime(1)-clock_time,' seconds'+string(BYTE('13'O))
 
 return
 

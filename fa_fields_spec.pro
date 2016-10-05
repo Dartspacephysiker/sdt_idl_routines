@@ -80,7 +80,7 @@ endelse
 ; FIRST SET UP KEYWORD DEFAULTS
 ; NPTS = number of time series points needed for each FFT.
 ; N_AVE = number of segments of NPTS data points to average together.
-if not keyword_set(npts) then npts = 1024
+if not keyword_set(npts)  then npts = 1024
 if not keyword_set(n_ave) then n_ave = 4
 if not keyword_set(slide) then slide = 0.5
 

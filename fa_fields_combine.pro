@@ -57,8 +57,10 @@ IF (data_type(dat1) ne 8) or (data_type(dat2) ne 8) then BEGIN
 ENDIF
      
 ; Check data tags.
+IF KEYWORD_SET(add) THEN BEGIN
 if not keyword_set(tag_1) then $
     tag_1 = strcompress('comp' + string(dat1.ncomp+1), /rem) 
+ENDIF
 if not keyword_set(tag_2) then tag_2='comp1'
 
 ; SET UP TAG
