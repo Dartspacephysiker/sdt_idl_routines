@@ -23,7 +23,7 @@ if keyword_set(var) then begin
    if n ne 0 then pan=i
 endif
 
-if not keyword_set(pan) then begin
+if N_ELEMENTS(pan) EQ 0 then begin
    message,/info,var+' Not plotted yet!'
    return
 endif
