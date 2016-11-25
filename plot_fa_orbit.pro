@@ -8,10 +8,11 @@ pro plot_fa_orbit,def=def
 	print,'Start of orbit 1 = 1996-08-21/11:07:22'
 ; Or get the current orbit
 	t = systime(1)+7.*3600.
+        t = str_to_time('99-01-23/13:09:28')
 	print,'Current GMT      = ',time_to_str(t)
 	tmin=t-4000
 	tmax=t+4000.
-	if keyword_set(def) then orbit_file='/disks/fast/almanac/orbit/definitive' else orbit_file='/disks/fast/almanac/orbit/predicted'
+	if keyword_set(def) then orbit_file='/FASTdata_1/almanac/orbit/definitive' else orbit_file='/FASTdata_1/almanac/orbit/predicted'
 	get_fa_orbit,tmin,tmax,/all,orbit_file=orbit_file
 	get_data,'ORBIT',data=tmp
 	orbit_num=strcompress(string(tmp.y(0)),/remove_all)
@@ -110,8 +111,8 @@ pro plot_fa_orbit,def=def
 ; Plot ground track on map of earth
 	window,4,xpos=280,ypos=0,xsize=400,ysize=300
 	;
-;	map_set,mol,30,-150
-	map_set,cyl
+;	map_set,/mol,30,-150
+	map_set,/cyl
 	map_continents
 	get_data,'LAT',data=lat
 	th=lat.y
