@@ -43,28 +43,28 @@ nb = dat.nbins
 	
 ebins2=replicate(1b,na)
 if keyword_set(en) then begin
-	ebins2(*)=0
+	ebins2[*]=0
 	er2=[energy_to_ebin(dat,en)]
-	if er2(0) gt er2(1) then er2=reverse(er2)
-	ebins2(er2(0):er2(1))=1
+	if er2[0] gt er2[1] then er2=reverse(er2)
+	ebins2[er2[0]:er2[1]]=1
 endif
 if keyword_set(er) then begin
-	ebins2(*)=0
+	ebins2[*]=0
 	er2=er
-	if er2(0) gt er2(1) then er2=reverse(er2)
-	ebins2(er2(0):er2(1))=1
+	if er2[0] gt er2[1] then er2=reverse(er2)
+	ebins2[er2[0]:er2[1]]=1
 endif
 if keyword_set(ebins) then ebins2=ebins
 
 bins2=replicate(1b,nb)
 
 if keyword_set(ar) then begin
-	bins2(*)=0
-	if ar(0) gt ar(1) then begin
-		bins2(ar(0):nb-1)=1
-		bins2(0:ar(1))=1
+	bins2[*]=0
+	if ar[0] gt ar[1] then begin
+		bins2[ar[0]:nb-1]=1
+		bins2[0:ar[1]]=1
 	endif else begin
-		bins2(ar(0):ar(1))=1
+		bins2[ar[0]:ar[1]]=1
 	endelse
 endif
 if keyword_set(bins) then bins2=bins
@@ -81,17 +81,17 @@ mass = dat.mass * 1.6e-22
 Const = 1.6e-12
 esa_dth = 5. < !pi*min(dtheta)/4.
 
-minvar = min(theta(0,*),indminvar)
+minvar = min(theta[0,*],indminvar)
 if indminvar gt 1 then begin
-	an_shift = theta(0,0) lt theta(0,1)
-endif else an_shift = theta(0,2) lt theta(0,3)
+	an_shift = theta[0,0] lt theta[0,1]
+endif else an_shift = theta[0,2] lt theta[0,3]
 an_shift = 2*an_shift-1
 
 if keyword_set(an) then begin
 	ann = (360.*(an/360.-floor(an/360.)))
-	if an(1) eq 360. then ann(1)=360.
+	if an[1] eq 360. then ann[1]=360.
 endif else ann=[0.,360.]
-if ann(0) gt ann(1) then begin
+if ann[0] gt ann[1] then begin
 	ann=reverse(ann) 
 	tfrev=1
 endif else tfrev=0
@@ -101,9 +101,9 @@ endif else tfrev=0
 th2_tmp = theta + dtheta/2.
 th2_tmp = (360.*(th2_tmp/360.-floor(th2_tmp/360.)))
 th1_tmp = th2_tmp - dtheta
-th1 = th1_tmp > ann(0) < ann(1)
+th1 = th1_tmp > ann[0] < ann[1]
 th1 = th1 > 0. < 180.
-th2 = th2_tmp > ann(0) < ann(1)
+th2 = th2_tmp > ann[0] < ann[1]
 th2 = th2 > 0. < 180.
 th_plus = (th1 lt esa_dth) and (th1 ne th2)
 th_minus = (th2 gt 180.-esa_dth) and (th1 ne th2)
@@ -137,9 +137,9 @@ endif
 th3_tmp = theta - dtheta/2.
 th3_tmp = (360.*(th3_tmp/360.-floor(th3_tmp/360.)))
 th4_tmp = th3_tmp + dtheta
-th3 = th3_tmp > ann(0) < ann(1)
+th3 = th3_tmp > ann[0] < ann[1]
 th3 = th3 > 180. < 360.
-th4 = th4_tmp > ann(0) < ann(1)
+th4 = th4_tmp > ann[0] < ann[1]
 th4 = th4 > 180. < 360.
 th_plus = (th4 gt 360.-esa_dth) and (th4 ne th3)
 th_minus = (th3 lt 180.+esa_dth) and (th4 ne th3)

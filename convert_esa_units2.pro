@@ -52,7 +52,7 @@ case strupcase(data.units_name) of
 'EFLUX'  :  scale = (gf * geom)
 'FLUX'   :  scale = (gf * geom) * energy
 'DF'     :  scale = (gf * geom) * energy^2 * 2./mass/mass*1e5
-'DFSTD'  :  scale = (gf * geom) * energy^2 * 2./mass/mass*1e2
+'DFSTD'  :  scale = (gf * geom) * energy^2 * 2./mass/mass*1e8
 else: begin
         print,'Unknown starting units: ',data.units_name
 	return
@@ -73,9 +73,9 @@ case strupcase(units) of
 'RATE'   :  scale = 1. / (dt)
 'CRATE'  :  scale = 1. / (dt)
 'EFLUX'  :  scale = 1. / (dt * gf * geom)
-'FLUX'   :  scale = 1. / (dt * gf * geom * energy)
+'FLUX'   :  scale = 1. / (dt * gf * geom  * energy)
 'DF'     :  scale = 1. / (dt * gf * geom  * energy^2 * 2./mass/mass*1e5 )
-'DFSTD'  :  scale = 1. / (dt * gf * geom  * energy^2 * 2./mass/mass*1e2 )
+'DFSTD'  :  scale = 1. / (dt * gf * geom  * energy^2 * 2./mass/mass*1e8 )
 else: begin
         print,'Undefined units: ',units
 	return

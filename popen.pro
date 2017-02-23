@@ -32,6 +32,7 @@ pro popen,n,          $
   interp = interp,    $
   ctable = ctable,    $
   copy = copy,        $
+  quiet = quiet,      $        
   encapsulated = encap
 @popen_com.pro
 
@@ -51,9 +52,9 @@ if data_type(fname) ne 7 then fname = 'plot.ps'
 if print_directory ne '' then fname = print_directory+'/'+fname
 
 if n_elements (old_device) eq 0 then popened = 0
-if popened then  pclose,printer=printer
+if popened then  pclose,printer=printer,QUIET=quiet
 
-print ,'Opening postscript file '+fname+'.  Use PCLOSE to close'
+IF ~KEYWORD_SET(quiet) THEN print ,'Opening postscript file '+fname+'.  Use PCLOSE to close'
 
 old_device = !d.name
 old_fname  = fname

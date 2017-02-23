@@ -37,9 +37,9 @@ endif
 dlist = strarr(ndl)
 start_times = dblarr(ndl)
 end_times = dblarr(ndl)
-len = strlen(result(dl))
+len = strlen(result[dl])
 for i=0,ndl-1l do begin
-    line = result(dl(i))
+    line = result[dl[i]]
     if (!VERSION.RELEASE LE '5.4') then begin
         last_colon = rstrpos(line,':')
     endif else begin
