@@ -38,17 +38,18 @@ pro popen,n,          $
 
 print_options,directory=printdir,land=land,port=port
 
-;if keyword_set(encap) then 
+f_ext = '.ps'
+if keyword_set(encap) then f_ext = '.eps'
 
 if n_params() ne 0 then begin
   if data_type(n) eq 0 then n = 1
   if data_type(n) eq 2 then begin
-    fname = strcompress('plot'+string(n)+'.ps',/REMOVE_ALL)
+    fname = strcompress('plot'+string(n)+f_ext,/REMOVE_ALL)
     n = n+1
   endif
-  if data_type(n) eq 7 then fname=n+'.ps'
+  if data_type(n) eq 7 then fname=n+f_ext
 endif
-if data_type(fname) ne 7 then fname = 'plot.ps'
+if data_type(fname) ne 7 then fname = 'plot'+f_ext
 if print_directory ne '' then fname = print_directory+'/'+fname
 
 if n_elements (old_device) eq 0 then popened = 0
@@ -78,7 +79,7 @@ if keyword_set(bw) then begin  ; force all colors to black
   tvlct,r,g,b
 endif
 
-device,file=old_fname
+device,file=old_fname,ENCAPSULATED=encap
 
 popened = 1
 

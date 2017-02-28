@@ -21,4 +21,5 @@ common hardcopy_stuff,old_device, $
     printer_name,  $
     print_directory, $
     print_font, $
-    popened
+    popened, $
+    f_ext
