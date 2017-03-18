@@ -45,18 +45,18 @@ endif
 ind1=findgen(32)*2
 ind2=ind1+1
 if ndimen(dat.geom) eq 1 then begin
-	geom1=dat.geom(ind1) 
-	geom2=dat.geom(ind2) 
+	geom1=dat.geom[ind1] 
+	geom2=dat.geom[ind2] 
 endif else begin
-	geom1=dat.geom(*,ind1)
-	geom2=dat.geom(*,ind2)
+	geom1=dat.geom[*,ind1]
+	geom2=dat.geom[*,ind2]
 endelse
 if ndimen(dat.dtheta) eq 1 then begin
-	dtheta1=dat.dtheta(ind1)*2. 
-	dtheta2=dat.dtheta(ind2)*2. 
+	dtheta1=dat.dtheta[ind1]*2. 
+	dtheta2=dat.dtheta[ind2]*2. 
 endif else begin
-	dtheta1=dat.dtheta(*,ind1)*2.
-	dtheta2=dat.dtheta(*,ind2)*2.
+	dtheta1=dat.dtheta[*,ind1]*2.
+	dtheta2=dat.dtheta[*,ind2]*2.
 endelse
 
 dat1 = 		{data_name:		dat.data_name, 			$
@@ -69,11 +69,11 @@ dat1 = 		{data_name:		dat.data_name, 			$
 		integ_t: 		dat.integ_t,			$
 		nbins: 			32, 				$
 		nenergy: 		dat.nenergy, 			$
-		data: 			dat.data(*,ind1), 		$
-		energy: 		dat.energy(*,ind1), 		$
-		theta: 			dat.theta(*,ind1),  		$
+		data: 			dat.data[*,ind1], 		$
+		energy: 		dat.energy[*,ind1], 		$
+		theta: 			dat.theta[*,ind1],  		$
 		geom: 			geom1, 	 			$
-		denergy: 		dat.denergy(*,ind1),       	$
+		denergy: 		dat.denergy[*,ind1],       	$
 		dtheta: 		dtheta1, 			$
 		eff: 			dat.eff,	 		$
 		mass: 			dat.mass, 			$
@@ -91,11 +91,11 @@ dat2 = 		{data_name:		dat.data_name, 			$
 		integ_t: 		dat.integ_t,			$
 		nbins: 			32, 				$
 		nenergy: 		dat.nenergy, 			$
-		data: 			dat.data(*,ind2), 		$
-		energy: 		dat.energy(*,ind2), 		$
-		theta: 			dat.theta(*,ind2),  		$
+		data: 			dat.data[*,ind2], 		$
+		energy: 		dat.energy[*,ind2], 		$
+		theta: 			dat.theta[*,ind2],  		$
 		geom: 			geom2, 	 			$
-		denergy: 		dat.denergy(*,ind2),       	$
+		denergy: 		dat.denergy[*,ind2],       	$
 		dtheta: 		dtheta2, 			$
 		eff: 			dat.eff,	 		$
 		mass: 			dat.mass, 			$

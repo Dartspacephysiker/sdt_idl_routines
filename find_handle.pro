@@ -30,17 +30,19 @@ if dt eq 7 then begin
   endif else begin
     names = strsplit(name,'.', /EXTRACT)
   endelse
-  if n_elements(names) gt 1 then tagname=names(1)
-  index = where(data_quants.name eq names(0),count)
+  if n_elements(names) gt 1 then tagname=names[1]
+  index = where(data_quants.name eq names[0],count)
   if count eq 0 then return,0
-  return, index(0)
+  return, index[0]
 endif
 if dt ge 1 or dt le 5 then begin
-  index = round(name)
-  if index gt 0 and index lt n_elements(data_quants) then $
-     name = data_quants(index).name $
-  else index = 0
-  return,index 
+   index = round(name)
+   if index gt 0 and index lt n_elements(data_quants) then BEGIN
+      name = data_quants[index].name
+   ENDIF ELSE BEGIN
+      index = 0
+   ENDELSE
+   return,index 
 endif
 return,0
 end
