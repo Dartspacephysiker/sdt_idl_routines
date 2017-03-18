@@ -30,7 +30,8 @@
 ;LAST MODIFICATION:
 ;	97-8-13		J.McFadden
 ;-
-function je_2d_fs,dat,ENERGY=en,ERANGE=er,EBINS=ebins,ANGLE=an,ARANGE=ar,BINS=bins
+function je_2d_fs,dat,ENERGY=en,ERANGE=er,EBINS=ebins,ANGLE=an,ARANGE=ar,BINS=bins,JJE=JJe
+
 
 if dat.valid eq 0 then begin
 	print,'Invalid Data'
@@ -39,7 +40,8 @@ if dat.valid eq 0 then begin
 endif
 
 if dat.nbins eq 32 or dat.project_name ne 'FAST' then begin
-	return, je_2d_b(dat,ENERGY=en,ERANGE=er,EBINS=ebins,ANGLE=an,ARANGE=ar,BINS=bins)
+   return, je_2d_b(dat,ENERGY=en,ERANGE=er,EBINS=ebins,ANGLE=an,ARANGE=ar,BINS=bins, $
+                   JJE=JJe)
 endif
 
 ind1=findgen(32)*2
@@ -105,8 +107,8 @@ dat2 = 		{data_name:		dat.data_name, 			$
 
 ;	Note that the EBINS, ARANGE, and BINS keywords below may not work properly.
 
-j1=je_2d_b(dat1,ENERGY=en,ERANGE=er,EBINS=ebins,ANGLE=an,ARANGE=ar,BINS=bins)
-j2=je_2d_b(dat2,ENERGY=en,ERANGE=er,EBINS=ebins,ANGLE=an,ARANGE=ar,BINS=bins)
+j1=je_2d_b(dat1,ENERGY=en,ERANGE=er,EBINS=ebins,ANGLE=an,ARANGE=ar,BINS=bins,JJE=JJe)
+j2=je_2d_b(dat2,ENERGY=en,ERANGE=er,EBINS=ebins,ANGLE=an,ARANGE=ar,BINS=bins,JJE=JJe)
 
 ;print,'j1=',j1
 ;print,'j2=',j2

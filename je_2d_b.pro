@@ -28,7 +28,7 @@
 ;LAST MODIFICATION:
 ;	97-5-14		J.McFadden
 ;-
-function je_2d_b,dat2,ENERGY=en,ERANGE=er,EBINS=ebins,ANGLE=an,ARANGE=ar,BINS=bins
+function je_2d_b,dat2,ENERGY=en,ERANGE=er,EBINS=ebins,ANGLE=an,ARANGE=ar,BINS=bins,JJE=JJe
 
 eflux3dz = 0.
 
@@ -171,7 +171,7 @@ endif
 domega = domega1 + domega2
 
 sumdataz = total(data*domega,2)
-eflux3dz = Const*total(denergy*sumdataz)
+eflux3dz = KEYWORD_SET(JJe) ? Const*total(denergy^2.D/energy^(-1D)*sumdataz) : Const*total(denergy*sumdataz)
 
 ; units are ergs/cm^2-sec
 
