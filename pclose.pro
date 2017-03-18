@@ -14,7 +14,7 @@
 
 
 
-pro pclose,printer=printer
+pro pclose,printer=printer,quiet=quiet
 @popen_com.pro
 
 if !d.name eq 'PS' then begin
@@ -23,7 +23,7 @@ if !d.name eq 'PS' then begin
    !p.background = old_bckgrnd
    !p.color      = old_color
    !p.font       = old_font
-   print,"Closing plot ",old_fname
+   IF ~KEYWORD_SET(quiet) THEN print,"Closing plot ",old_fname
 endif
 
 if n_elements(printer) then printer_name = string(printer)
