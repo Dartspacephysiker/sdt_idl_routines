@@ -1,4 +1,8 @@
-function alfven_speed_mlt,alt,mlt
+function alfven_speed_mlt,alt,mlt, $
+                          HPLASMAF=hplasmaf, $
+                          OPLASMAF=oplasmaf, $
+                          HCYCF=hcycf, $
+                          OCYCF=ocycf
 
 
 c=3.0e5

@@ -151,18 +151,41 @@ options,'Enorth', 'color',6      ;;; red
 store_data, 'Eeast,Enorth(red)', data={x:tvd, y:Eeast}
 
 if not keyword_set(no_plot) then begin
-	ymin = min([Enorth, Eeast])
-	ymax = max([Enorth, Eeast])
+   ;; ymin = min([Enorth, Eeast])
+   ;; ymax = max([Enorth, Eeast])
 
-	tplot,['-v_ixb','eav','Eeast,Enorth(red)']
+   ;; tplot,['-v_ixb','eav','Eeast,Enorth(red)']
 
-	tplot_panel,var='-v_ixb',oplot='zero' 
-	tplot_panel,var='-v_ixb',oplot='-v_scXb'
-	tplot_panel,var='eav',oplot='smoothedeav'
-	tplot_panel,var='eav',oplot='zero'
-	tplot_panel,var='Eeast,Enorth(red)',oplot='Enorth'
-	tplot_panel,var='Eeast,Enorth(red)',oplot='zero'
-	ylim,'Eeast,Enorth(red)',ymin,ymax,0	
+   ;; tplot_panel,var='-v_ixb',oplot='zero' 
+   ;; tplot_panel,var='-v_ixb',oplot='-v_scXb'
+   ;; tplot_panel,var='eav',oplot='smoothedeav'
+   ;; tplot_panel,var='eav',oplot='zero'
+   ;; tplot_panel,var='Eeast,Enorth(red)',oplot='Enorth'
+   ;; tplot_panel,var='Eeast,Enorth(red)',oplot='zero'
+   ;; ylim,'Eeast,Enorth(red)',ymin,ymax,0	
+
+   ;; imok = WHERE(FINITE(Enorth) AND FINITE(Eeast))
+   ;; ymin = min([Enorth[imok], Eeast[imok]])
+   ;; ymax = max([Enorth[imok], Eeast[imok]])
+   ;; ylim,'Eeast,Enorth(red)',ymin,ymax,0	
+
+   t1Zoom = tt1
+   t2Zoom = tt2
+
+   t1Str = '1997-02-01/09:26:40'
+   t2Str = '1997-02-01/09:27:10'
+   t1Zoom = STR_TO_TIME(t1Str)
+   t2Zoom = STR_TO_TIME(t2Str)
+   
+
+   tplot,['-v_ixb','eav','Eeast,Enorth(red)'],TRANGE=[t1Zoom,t2Zoom]
+
+   tplot_panel,var='-v_ixb',oplot='zero' 
+   tplot_panel,var='-v_ixb',oplot='-v_scXb'
+   tplot_panel,var='eav',oplot='smoothedeav'
+   tplot_panel,var='eav',oplot='zero'
+   tplot_panel,var='Eeast,Enorth(red)',oplot='Enorth'
+   tplot_panel,var='Eeast,Enorth(red)',oplot='zero'
 endif
 
 stop

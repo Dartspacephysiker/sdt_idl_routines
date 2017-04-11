@@ -30,7 +30,9 @@
 ;LAST MODIFICATION:
 ;	97-8-19		J.McFadden
 ;-
-function p_2d_b,dat2,ENERGY=en,ERANGE=er,EBINS=ebins,ANGLE=an,ARANGE=ar,BINS=bins
+function p_2d_b,dat2,ENERGY=en,ERANGE=er,EBINS=ebins,ANGLE=an,ARANGE=ar,BINS=bins, $
+                OUT_DOMEGA_XX=domega_xx,OUT_1DOMEGA_XX=domega1_xx,OUT_2DOMEGA_XX=domega2_xx, $
+                OUT_DOMEGA_ZZ=domega_zz,OUT_1DOMEGA_ZZ=domega1_zz,OUT_2DOMEGA_ZZ=domega2_zz
 
 p3dxx = 0.
 p3dyy = 0.

@@ -89,7 +89,8 @@ pro get_fa_attitude, $
     show_good_att=show_good_att, $
     show_ext_att=show_ext_att, $
     show_bad_att=show_bad_att, $
-    show_valid=show_valid
+   show_valid=show_valid, $
+   STRUCT=struct
 
 ; on return, status will be 0 on success, non-zero on failure
 status = -1
@@ -232,6 +233,10 @@ store_data, 'fa_spin_freq' , data={x:times, y:angles.spin_freq,  ytitle:'fa_spin
 store_data, 'fa_attlevel'  , data={x:times, y:attlevel,          ytitle:'fa_attlevel'}
 matname = 'fa_rotmat_' + strlowcase(coord)
 store_data, matname,      data={x:times, y:matrix, ytitle:matname}
+
+IF ARG_PRESENT(struct) THEN BEGIN
+   struct = {x:times,angles:angles,attlevel:attlevel}
+ENDIF
 
 return
 end

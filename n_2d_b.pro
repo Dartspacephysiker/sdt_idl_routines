@@ -28,7 +28,7 @@
 ;LAST MODIFICATION:
 ;	97-7-11		J.McFadden
 ;-
-function n_2d_b,dat2,ENERGY=en,ERANGE=er,EBINS=ebins,ANGLE=an,ARANGE=ar,BINS=bins
+function n_2d_b,dat2,ENERGY=en,ERANGE=er,EBINS=ebins,ANGLE=an,ARANGE=ar,BINS=bins,OUT_DOMEGA=domega,OUT_1DOMEGA=domega1,OUT_2DOMEGA=domega2
 
 density = 0.
 
