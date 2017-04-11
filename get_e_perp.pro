@@ -14,7 +14,7 @@
 ;       eavmean:        E_perp spin-plane component
 ;       Eeast:          E_perp component along the east unit vector
 ;       Enorth:         E_perp component along the north unit vector
-;       '-v_iXb [mV/m]'    {x:time, y:eion}
+;       '-v_ixb'    {x:time, y:eion}
 ;       'sm_eav'           {x:time, y:eavmean}
 ;       'Eeast'            {x:time, y:Eeast}
 ;       'Enorth'           {x;time, y:Enorth}
@@ -29,7 +29,7 @@
 ;   you should get a plot that looks like 'getEperp750.ps'
 ;
 
-pro get_E_perp, tt1, tt2, NO_PLOT = no_plot
+pro get_e_perp, tt1, tt2, NO_PLOT = no_plot
 
 device, decomposed = 0, retain = 2
 loadct2,13
@@ -48,7 +48,7 @@ ivdrift=0
 time=gettime(tt1)
 
 while time lt gettime(tt2) do begin
-ies = get_fa_ies_c(time,/advance)
+ies = get_fa_ieb_c(time,/advance)
 ies = conv_units(ies,'counts')
 ies.data = ies.data > 1
 if (min(ies.data) eq 1) then ies.data(where(ies.data eq 1)) = !values.f_nan
@@ -81,7 +81,7 @@ endwhile
 ;;;;;;; E_ion = -(v_drift+v_sc) X b, including subtraction of sc velocity contribution
 
 ;get_fa_orbit, tvd, n_elements(tvd), /time_array, /no_store, struc=orb, /all, /def
-get_fa_orbit, tvd, n_elements(tvd), /time_array, /no_store, struc=orb, /all, orbit_file='/afs/northstar.dartmouth.edu/ugrad/river/almanac/orbit/definitive'
+get_fa_orbit, tvd, n_elements(tvd), /time_array, /no_store, struc=orb, /all, /definitive
 bbbalt = sqrt(total(orb.B_model^2,2))    ;;;;; in nT
 v_sc = sqrt(total(orb.fa_vel^2,2))       ;;;;; in km/s
 
@@ -89,7 +89,7 @@ store_data,'-v_scXb',data={x:tvd,y:(-0.*vdrift-v_sc*1000.)*bbbalt*1.e-6}
 options,'-v_scXb','color',100   ;;; blue
 
 eion=-1.0*(vdrift+v_sc*1000.)*bbbalt*1.e-6     ;;;;; in mV/m
-store_data,'-v_iXb [mV/m]',data={x:tvd,y:eion}    ;;;;; vec[v_i = v_measure + v_sc], v_sc~90deg
+store_data,'-v_ixb',data={x:tvd,y:eion}    ;;;;; vec[v_i = v_measure + v_sc], v_sc~90deg
 store_data,'zero',data={x:tvd,y:-0.0*eion}
 
 
@@ -134,7 +134,8 @@ unitv_fperp = normn3(crossn3(orb.B_model, unitQ))           ;;; x-axis
 
 unitR = normn3(orb.fa_pos)
 z = [0.,0.,1.]
-unitz = repvec(z,n_elements(tvd))                
+unitz = MAKE_ARRAY(n_elements(tvd),VALUE=1.0D,/DOUBLE) # TRANSPOSE(z)
+;; unitz = repvec(z,n_elements(tvd))                
 unitE = normn3(crossn3(unitz, unitR))             ;;; East unit vector
 unitN = normn3(crossn3(unitR, unitE))             ;;; North unit vector 
 
@@ -147,21 +148,21 @@ Eeast = eavmean*total(unitE*unitv_fperp,2) - bbbalt*viondrift*total(unitE*unitQ,
 store_data, 'Eeast', data={x:tvd, y:Eeast}
 store_data, 'Enorth', data={x:tvd, y:Enorth}
 options,'Enorth', 'color',6      ;;; red
-store_data, 'Eeast, Enorth(red)', data={x:tvd, y:Eeast}
+store_data, 'Eeast,Enorth(red)', data={x:tvd, y:Eeast}
 
 if not keyword_set(no_plot) then begin
 	ymin = min([Enorth, Eeast])
 	ymax = max([Enorth, Eeast])
 
-	tplot,['-v_iXb [mV/m]','eav','Eeast, Enorth(red)']
+	tplot,['-v_ixb','eav','Eeast,Enorth(red)']
 
-	tplot_panel,var='-v_iXb [mV/m]',oplot='zero' 
-	tplot_panel,var='-v_iXb [mV/m]',oplot='-v_scXb'
+	tplot_panel,var='-v_ixb',oplot='zero' 
+	tplot_panel,var='-v_ixb',oplot='-v_scXb'
 	tplot_panel,var='eav',oplot='smoothedeav'
 	tplot_panel,var='eav',oplot='zero'
-	tplot_panel,var='Eeast, Enorth(red)',oplot='Enorth'
-	tplot_panel,var='Eeast, Enorth(red)',oplot='zero'
-	ylim,'Eeast, Enorth(red)',ymin,ymax,0	
+	tplot_panel,var='Eeast,Enorth(red)',oplot='Enorth'
+	tplot_panel,var='Eeast,Enorth(red)',oplot='zero'
+	ylim,'Eeast,Enorth(red)',ymin,ymax,0	
 endif
 
 stop
