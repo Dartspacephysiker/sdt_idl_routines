@@ -155,6 +155,36 @@ xdat=transpose(xdat)
 ydat=transpose(ydat)
 zdat=transpose(zdat)
 
+rmoffset = 0
+IF KEYWORD_SET(rmoffset) THEN BEGIN
+
+   IF KEYWORD_SET(polar) AND ~KEYWORD_SET(vel) THEN BEGIN
+      perpXDat    = (10.D^xdat)*SIN(ydat*!PI/180.)
+      parXDat     = (10.D^xdat)*COS(ydat*!PI/180.)
+   ENDIF ELSE BEGIN
+      perpXDat    = xdat*SIN(ydat*!PI/180.)
+      parXDat     = xdat*COS(ydat*!PI/180.)
+   ENDELSE
+   ;; offsetXDat     = 718.06D ;1997-02-02/21:01:57
+   offsetXDat     = 4293.06D ;1997-02-02/21:02:05.79
+
+   IF KEYWORD_SET(vel) THEN offsetXDat = VELOCITY(offsetXDat,data3d.mass)
+   
+   parXDatAvg  = TOTAL(parXDat * zdat)/TOTAL(zdat)
+   perpXDatAvg = TOTAL(perpXDat * zdat)/TOTAL(zdat)
+   offsetXDat  = ABS(offsetXDat)*ABS(parXDatAvg)/parXDatAvg
+
+   newParXDat  = parXDat - offsetXDat
+   IF KEYWORD_SET(polar) AND ~KEYWORD_SET(vel) THEN BEGIN
+      newXDat     = ALOG10(SQRT(newParXDat^2 + perpXDat^2))
+   ENDIF ELSE BEGIN
+      newXDat     = SQRT(newParXDat^2 + perpXDat^2)
+   ENDELSE
+
+   xDat        = newXDat
+
+ENDIF
+
 ; Use the following if array order matters
 ;if ydat(0,0) gt ydat(0,1) then begin
 ;	xdat = reverse(xdat,1)
