@@ -170,8 +170,8 @@ endif
 
 domega = domega1 + domega2
 
-sumdataz = total(data*domega,2)
-eflux3dz = KEYWORD_SET(JJe) ? Const*total(denergy^2.D/energy^(-1D)*sumdataz) : Const*total(denergy*sumdataz)
+sumdataz = total(data*domega,2,/NAN)
+eflux3dz = KEYWORD_SET(JJe) ? Const*total(denergy^2.D/energy^(-1D)*sumdataz,/NAN) : Const*total(denergy*sumdataz,/NAN)
 
 ; units are ergs/cm^2-sec
 

@@ -79,7 +79,7 @@ npts2 = n_elements(dat2.time)
 
 ; Set up array in double precision.
 result = dblarr(npts1)
-result(*) = !values.d_nan
+result[*] = !values.d_nan
 
 IF (n_elements(dat2.(tag2_n)) ne npts2) then BEGIN
     print,'FA_FIELDS_COMBINE: STOPPED.'

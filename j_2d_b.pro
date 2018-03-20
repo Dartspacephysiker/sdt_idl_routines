@@ -175,8 +175,8 @@ endif
 
 domega = domega1 + domega2
 
-sumdataz = total(data*domega,2)                    ;data and domega are 48x64 corresponding to energy and theta, so this gives a sum over thetas
-flux3dz = total((denergy*(energy^(-1)))*sumdataz)
+sumdataz = total(data*domega,2,/NAN)                    ;data and domega are 48x64 corresponding to energy and theta, so this gives a sum over thetas
+flux3dz = total((denergy*(energy^(-1)))*sumdataz,/NAN)
 
 ; units are #/cm^2-sec
 

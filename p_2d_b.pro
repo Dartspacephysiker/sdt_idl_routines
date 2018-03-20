@@ -251,9 +251,9 @@ sumxy = 0.
 sumxz = 0.
 sumyz = 0.
 
-p3dxx = Const*total(denergy*energy^(-.5)*sumxx)
+p3dxx = Const*total(denergy*energy^(-.5)*sumxx,/NAN)
 p3dyy = p3dxx
-p3dzz = Const*total(denergy*energy^(-.5)*sumzz)
+p3dzz = Const*total(denergy*energy^(-.5)*sumzz,/NAN)
 p3dxy = 0.
 p3dxz = 0.
 p3dyz = 0.

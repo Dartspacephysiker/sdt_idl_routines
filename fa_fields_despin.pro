@@ -80,7 +80,7 @@ endif
 
 ; First set up V58.
 IF not defined(V58) then BEGIN
-    V58 = get_fa_fields('V5-V8_S',t1,t2)
+    V58 = get_fa_fields('V5-V8_S',t1,t2,DEFAULT=((N_ELEMENTS(t1) EQ 0) AND (N_ELEMENTS(t2) EQ 0)),/CALIBRATE,/REPAIR)
     IF not v58.valid then BEGIN
         print, "FA_FIELDS_DESPIN: STOPPED!"
         print, "Cannot get V5-V8_S. Check SDT setup."
@@ -92,9 +92,9 @@ ENDIF
 
 IF not defined(V12) then BEGIN
     IF not keyword_set(Use_V158) then BEGIN
-        V12 = get_fa_fields('V1-V2_S',t1,t2)
+        V12 = get_fa_fields('V1-V2_S',t1,t2,DEFAULT=((N_ELEMENTS(t1) EQ 0) AND (N_ELEMENTS(t2) EQ 0)),/CALIBRATE,/REPAIR)
     ENDIF ELSE BEGIN
-        v12 = get_fa_v158(t1,t2,cutoff=cutoff)
+        v12 = get_fa_v158(t1,t2,cutoff=cutoff,DEFAULT=((N_ELEMENTS(t1) EQ 0) AND (N_ELEMENTS(t2) EQ 0)),/CALIBRATE,/REPAIR)
         fa_fields_filter,v58,[0,cutoff]
     ENDELSE
 

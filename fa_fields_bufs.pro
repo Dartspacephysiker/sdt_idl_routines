@@ -106,8 +106,8 @@ IF status gt 0 then BEGIN
     buf_starts  = lonarr(status)
     buf_ends    = lonarr(status)
     start_index = lindgen(status)*2
-    buf_starts  = result(start_index)
-    buf_ends    = result(start_index + 1l)
+    buf_starts  = result[start_index]
+    buf_ends    = result[start_index + 1l]
 ENDIF
 
 if status gt 4997 then print, 'FA_FIELDS_BUFS: TROUBLE! Too many segments.'

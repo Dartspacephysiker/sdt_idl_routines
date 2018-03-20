@@ -170,8 +170,8 @@ endif
 
 domega = domega1 + domega2
 
-sumdata = total(data*domega,2)
-density = Const*total(denergy*(energy^(-1.5))*sumdata)
+sumdata = total(data*domega,2,/NAN)
+density = Const*total(denergy*(energy^(-1.5))*sumdata,/NAN)
 
 ; units are 1/cm^3
 

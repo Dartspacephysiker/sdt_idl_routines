@@ -383,7 +383,7 @@ end
 ; $Id: svdfit.pro,v 1.2 1995/04/07 23:50:26 dave Exp $
 
 FUNCTION SVDFIT4,X,Y,M, YFIT = yfit, WEIGHT = weight, CHISQ = chisq, $
-	SINGULAR = sing, VARIANCE = var, COVAR = covar, Funct = funct
+	SINGULAR = sing, VARIANCE = var, COVAR = covar, Funct = funct,QUIET=quiet
 ;+
 ; NAME:
 ;	SVDFIT4
@@ -569,7 +569,7 @@ end
 
 
 
-pro spin_tone_fit,BB,dtime,coef,tspin,ttag,bfit=bfit
+pro spin_tone_fit,BB,dtime,coef,tspin,ttag,bfit=bfit,QUIET=quiet
 
 ; edited version of rce_loop2_rjs.pro - error quantities deleted
 
@@ -625,7 +625,7 @@ while n1 lt nspin-2 do begin
 			sing=0
 			soln=svdfit4((dtime(ista:isto)-tref)*trange-5.d0,BB(ista:isto,kk), $
 			6,funct='spinbase_mag',yfit=yft,chisq=bsig,variance=var, $
-			singular=sing)
+			singular=sing,QUIET=quiet)
 			if sing ne 0 then begin
 
 ;  diagnostic
@@ -678,7 +678,7 @@ off2=coef(5,*)
 
 coef=[b1xy,bz,r21,phi21,r31,phi31,off1,off2,nsamp]
 
-print,'SPIN_TONE_FIT took ',systime(1)-tttm,' Seconds'
+IF ~KEYWORD_SET(quiet) THEN print,'SPIN_TONE_FIT took ',systime(1)-tttm,' Seconds'
 
 return
 end	
@@ -710,7 +710,7 @@ basis(*,5)=tt
 return,float(basis)
 end
 
-function get_cal_history,fname,debug=debug,fdf_predict=fdf_predict,cal_version=cal_version
+function get_cal_history,fname,debug=debug,fdf_predict=fdf_predict,cal_version=cal_version,QUIET=quiet
 
 ; read the magDC.cal file, and return coupling matrices, offsets
 
@@ -734,12 +734,12 @@ if n_params() eq 0 then begin
     fname='$FAST_CALIBRATION/MagDC.cal'
     openr,lu,fname,error=error,/get_lun
     if (error eq 0) then begin
-        print,'Opened ',fname
+       IF ~KEYWORD_SET(quiet) THEN print,'Opened ',fname
     endif else begin
         fname='$FASTLIB/fast_fields_cals/MagDC.cal'
         openr,lu,fname,error=error,/get_lun
         if (error eq 0) then begin
-            print,'Opened ',fname
+           IF ~KEYWORD_SET(quiet) THEN print,'Opened ',fname
         endif else begin
             print,'Could not open MagDC.cal'
             return,0
@@ -751,13 +751,13 @@ endif else begin
         print,'File ',fname,' not found'
         return,0
     endif else begin
-        print,'Opened ',fname
+       IF ~KEYWORD_SET(quiet) THEN print,'Opened ',fname
     endelse
 endelse
 
 com = 'egrep -v "^#" '+fname+'|grep -i -c "epoch time"'
 spawn,com,result
-reads,result(0),n_epochs
+reads,result[0],n_epochs
 
 
 s=''
@@ -785,7 +785,7 @@ cal_msg = strarr(n_epochs)
 while not EOF(lu) and n_epoch lt n_epochs do begin
   readf,lu,s
   m = strpos(s,'@(#)MagDC.cal')
-  if (m ge 0) then print,'  Calibration version: ',strmid(s,1,m-1),'    ',strmid(s,m+4,40)
+  if (m ge 0) then IF ~KEYWORD_SET(quiet) THEN print,'  Calibration version: ',strmid(s,1,m-1),'    ',strmid(s,m+4,40)
   if (m ge 0) then cal_version={date:strtrim(strmid(s,1,m-1),2),number:strtrim(strmid(s,m+14,40),2)}
   m = strpos(strlowcase(s),'# fdf prediction')
   if (m ge 0) then begin
@@ -1017,7 +1017,7 @@ return,has_mag
 end
 
 pro get_mag_tweak,pseudo,mag,spin_fit,tw,ofst,useraw=useraw,norepair=norepair,fdf_predict=fdf_predict, $
-do_recal=do_recal,no_recal=no_recal,cal_version=cal_version
+do_recal=do_recal,no_recal=no_recal,cal_version=cal_version,QUIET=quiet
 
 ; get the data for use in tweaker coefficient calculations
 
@@ -1079,9 +1079,9 @@ norb_max_gap = 200  ; maximum gap to interpolate calibration data
 
 if keyword_set(norepair) then repair = 0 else repair = 1
 
-print,''
-print,'Getting MAG data from SDT'
-print,''
+IF ~KEYWORD_SET(quiet) THEN print,''
+IF ~KEYWORD_SET(quiet) THEN print,'Getting MAG data from SDT'
+IF ~KEYWORD_SET(quiet) THEN print,''
 
 has_mag=get_mag_dqis()
 
@@ -1239,9 +1239,9 @@ endif else begin
 
 endelse
 
-print,''
-print,'Store and interpolate MAG data'
-print,''
+IF ~KEYWORD_SET(quiet) THEN print,''
+IF ~KEYWORD_SET(quiet) THEN print,'Store and interpolate MAG data'
+IF ~KEYWORD_SET(quiet) THEN print,''
 
 ; magxyz data ok - store
 ; note that magxyz.time is the same as mag1dc_s.time (i.e., z-sensor time)
@@ -1297,9 +1297,9 @@ if (magdc.valid eq 0) then begin
 
 ; Fix the recursive filter 
 
-  print,''
-  print,'Fixing Recursive Filter'
-  print,''
+IF ~KEYWORD_SET(quiet) THEN   print,''
+IF ~KEYWORD_SET(quiet) THEN   print,'Fixing Recursive Filter'
+IF ~KEYWORD_SET(quiet) THEN   print,''
   fix_magx,magx,magx_fix,magx_time
   fix_magy,magy,magy_fix,magy_time
   fix_magz,magz,magz_fix,magz_time
@@ -1325,9 +1325,9 @@ nno=nno+1
 
 if (nnt gt 0 ) then begin
 
-    print,''
-    print,'Smoothing and resampling 512 sps data at 128 sps'
-    print,''
+IF ~KEYWORD_SET(quiet) THEN     print,''
+IF ~KEYWORD_SET(quiet) THEN     print,'Smoothing and resampling 512 sps data at 128 sps'
+IF ~KEYWORD_SET(quiet) THEN     print,''
 
     nv = 2L+lindgen((nnt+2L)/4L)*4L
 
@@ -1353,7 +1353,7 @@ endif
 
 ref_9937 = str_to_time('1999-02-24/22:29:47')
 
-cal_hist = get_cal_history(fdf_predict=fdf_predict,cal_version=cal_version)
+cal_hist = get_cal_history(fdf_predict=fdf_predict,cal_version=cal_version,QUIET=quiet)
 
 tw = dblarr(3,3)
 ofst = dblarr(3)
@@ -1551,9 +1551,9 @@ endelse
 
 ; Compute a new tweaker matrix
 
-print,''
-print,'Computing New Tweaker Coefficients - Be Patient'
-print,''
+IF ~KEYWORD_SET(quiet) THEN print,''
+IF ~KEYWORD_SET(quiet) THEN print,'Computing New Tweaker Coefficients - Be Patient'
+IF ~KEYWORD_SET(quiet) THEN print,''
 time=magz_time-magz_time(0)
 BB = {x:time,y:[[mag_x],[mag_y],[mag_z]]}
 
@@ -1761,7 +1761,7 @@ end
 
 
 
-function get_torquer_mag,spinfit,mag,tw,torquer,debug=debug
+function get_torquer_mag,spinfit,mag,tw,torquer,debug=debug,QUIET=quiet
 
 ; get an estimate of the torquer coil offsets
 
@@ -1968,9 +1968,9 @@ if (nz gt 0) then begin
 
     if (has_torq) then  begin
 
-        print,''
-        print,'Subtracting torquer coil offsets'
-        print,''
+IF ~KEYWORD_SET(quiet) THEN         print,''
+IF ~KEYWORD_SET(quiet) THEN         print,'Subtracting torquer coil offsets'
+IF ~KEYWORD_SET(quiet) THEN         print,''
 
         spinfit.bx_dc=spinfit.bx_dc-xtorq
         spinfit.by_dc=spinfit.by_dc-ytorq
@@ -2102,7 +2102,7 @@ end
 
 ; fix up the spin phase - still under test
 
-pro fix_up_spin,frq,phs,time_error=time_error,flags=flags,nsm1=nsm1,nsm2=nsm2,nsm3=nsm3,nsm4=nsm4,debug=debug,no_query=no_query,is_sun=is_sun
+pro fix_up_spin,frq,phs,time_error=time_error,flags=flags,nsm1=nsm1,nsm2=nsm2,nsm3=nsm3,nsm4=nsm4,debug=debug,no_query=no_query,is_sun=is_sun,QUIET=quiet
 
 if keyword_set(debug) then debug = 1 else debug = 0
 if keyword_set(no_query) then no_query = 1 else no_query = 0
@@ -2244,7 +2244,7 @@ endif else begin
    endelse
    b = where (strpos(result,'AttitudeCtrl') ge 0,nb)
    if (nb gt 0) then begin
-      print,'GETTING IS_SUN'
+IF ~KEYWORD_SET(quiet) THEN       print,'GETTING IS_SUN'
       data=get_ts_from_sdt('AttitudeCtrl',2001,/all)
 
 ;     force data monotonic
@@ -2543,13 +2543,13 @@ if (no_query eq 0) then begin
    print,bell
 
    if (time_error) then print,'Warning - possible UT offset change'
-   if (del_phase) then print,'Note - corrected phase offsets - not shown in plot'
+   if (del_phase) then IF ~KEYWORD_SET(quiet) THEN print,'Note - corrected phase offsets - not shown in plot'
    ans = ''
    read, ans, prompt='Are new values reasonable? '
 endif else begin
    if (time_error or del_phase) then print,''
    if (time_error) then print,'FIX_UP_SPIN Warning - possible UT offset change'
-   if (del_phase) then print,'FIX_UP_SPIN Note - corrected phase offsets'
+   if (del_phase) then IF ~KEYWORD_SET(quiet) THEN print,'FIX_UP_SPIN Note - corrected phase offsets'
    if (time_error or del_phase) then print,''
    ans='Y'
 endelse
@@ -3921,7 +3921,7 @@ return
 end
 
 
-function get_phase_from_attctrl,debug=debug
+function get_phase_from_attctrl,debug=debug,quiet=quiet
 
 ; patch the Sun phase information from attitude control quantities
 
@@ -3957,10 +3957,12 @@ if (nb eq 0) then begin
 
 endif else begin
 
-    print,''
-    print,'Getting phase data from AttitudeCtrl'
-    print,''
-
+   IF ~KEYWORD_SET(quiet) THEN BEGIN
+      print,''
+      print,'Getting phase data from AttitudeCtrl'
+      print,''
+   ENDIF
+   
    data=get_ts_from_sdt('AttitudeCtrl',2001,/all)
 
 ;  force sun into data.comp24/25 - under test - now using MUE reported times etc.
@@ -4027,7 +4029,7 @@ end
 
 
 function patch_spin_phase,phase_data,exp_ra,exp_dec, $
-no_patch=no_patch,force_patch=force_patch,no_model=no_model,no_query=no_query
+no_patch=no_patch,force_patch=force_patch,no_model=no_model,no_query=no_query,QUIET=quiet
 
 ; patch the spin phase using recalculated nadir phase data
 
@@ -4063,9 +4065,9 @@ if (force_patch) then nbad=n_elements(do_patch)
 
 if (no_model eq 0 and no_patch eq 0 and nbad gt 0) then begin
 
-   print,''
-   print,'Patching spin phase data with nadir phase'
-   print,''
+IF ~KEYWORD_SET(quiet) THEN    print,''
+IF ~KEYWORD_SET(quiet) THEN    print,'Patching spin phase data with nadir phase'
+IF ~KEYWORD_SET(quiet) THEN    print,''
 
    get_data,'fa_pos',data=fa_pos_gei
    the_sun=get_sun_ra_dec(fa_pos_gei.x)

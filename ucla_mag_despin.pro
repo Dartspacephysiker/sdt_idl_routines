@@ -473,7 +473,7 @@ no_patch=no_patch,force_patch=force_patch,no_spin_tone=no_spin_tone, $
 useraw=useraw,calctorq=calctorq,no_query=no_query,use_fdf=use_fdf, $
 use_rgb=use_rgb, default=default, use_igrf7=use_igrf7, $
 cal_version=cal_version,do_tweak=do_tweak,no_tweak=no_tweak, $
-do_develop=do_develop
+do_develop=do_develop,QUIET=quiet
 
 ; options/revisions to be added later:
 ;  1)  Patch nadir data - improve phase corrections at eclipse entry/exit
@@ -515,9 +515,9 @@ endif
 clock_time = systime(1)
 last_clock = clock_time
 
-print,''
-print,'Starting UCLA_MAG_DESPIN, version ',code_version
-print,''
+IF ~KEYWORD_SET(quiet) THEN print,''
+IF ~KEYWORD_SET(quiet) THEN print,'Starting UCLA_MAG_DESPIN, version ',code_version
+IF ~KEYWORD_SET(quiet) THEN print,''
 
 ; set up options - first parse old keywords 
 
@@ -531,38 +531,38 @@ if keyword_set(no_patch) then no_patch = 1 else no_patch = 0
 if keyword_set(force_patch) then force_patch = 1 else force_patch = 0
 
 if keyword_set(useraw) then begin
-   print,''
-   print,'No longer need to use USE_RAW keyword, set automatically'
-   print,''
+IF ~KEYWORD_SET(quiet) THEN    print,''
+IF ~KEYWORD_SET(quiet) THEN    print,'No longer need to use USE_RAW keyword, set automatically'
+IF ~KEYWORD_SET(quiet) THEN    print,''
 endif
 if keyword_set(calctorq) then begin
-   print,''
-   print,'No longer need to use CALCTORQ keyword, set automatically'
-   print,''
+IF ~KEYWORD_SET(quiet) THEN    print,''
+IF ~KEYWORD_SET(quiet) THEN    print,'No longer need to use CALCTORQ keyword, set automatically'
+IF ~KEYWORD_SET(quiet) THEN    print,''
 endif
 if keyword_set(no_query) then begin
-   print,''
-   print,'No longer need to use NO_QUERY keyword, set automatically'
-   print,''
+IF ~KEYWORD_SET(quiet) THEN    print,''
+IF ~KEYWORD_SET(quiet) THEN    print,'No longer need to use NO_QUERY keyword, set automatically'
+IF ~KEYWORD_SET(quiet) THEN    print,''
 endif
 if keyword_set(use_fdf) then begin
-   print,''
-   print,'No longer need to use USE_FDF keyword, set automatically'
-   print,''
+IF ~KEYWORD_SET(quiet) THEN    print,''
+IF ~KEYWORD_SET(quiet) THEN    print,'No longer need to use USE_FDF keyword, set automatically'
+IF ~KEYWORD_SET(quiet) THEN    print,''
 endif
 if keyword_set(USE_RGB) then begin
-   print,''
-   print,'No longer need to use USE_RGB keyword, set automatically'
-   print,''
+IF ~KEYWORD_SET(quiet) THEN    print,''
+IF ~KEYWORD_SET(quiet) THEN    print,'No longer need to use USE_RGB keyword, set automatically'
+IF ~KEYWORD_SET(quiet) THEN    print,''
 endif
 
 has_mag=get_mag_dqis()
 
 if keyword_set(default) then default = 1 else default = 0
 if (default) then begin
-   print,''
-   print,'No longer need to use DEFAULT keyword, set automatically'
-   print,''
+IF ~KEYWORD_SET(quiet) THEN    print,''
+IF ~KEYWORD_SET(quiet) THEN    print,'No longer need to use DEFAULT keyword, set automatically'
+IF ~KEYWORD_SET(quiet) THEN    print,''
    calctorq=1
    no_query=1
    useraw=0
@@ -625,14 +625,14 @@ last_clock = systime(1)
 
 ; get spin phase data from AttitudeCtrl
 
-phase_data = get_phase_from_attctrl(debug = (debug and develop))
+phase_data = get_phase_from_attctrl(debug = (debug and develop),QUIET=quiet)
 if (n_tags(phase_data) eq 0) then return
 
 ; STEPS 2 and 3
 
 ; get magnetometer data
 
-get_mag_tweak,pseudo,mag,spinfit,tw,ofst,useraw=useraw,fdf_predict=fdf_predict,do_recal=do_recal,no_recal=no_recal,cal_version=cal_version
+get_mag_tweak,pseudo,mag,spinfit,tw,ofst,useraw=useraw,fdf_predict=fdf_predict,do_recal=do_recal,no_recal=no_recal,cal_version=cal_version,QUIET=quiet
 
 help,do_recal,no_recal
 if n_tags(pseudo) eq 0 then begin
@@ -681,9 +681,9 @@ if (timer) then print, $
    next_clock-last_clock,' seconds'
 last_clock=next_clock
 
-print,''
-print,'Setting up spin-tone tweaker matrix coefficients'
-print,''
+IF ~KEYWORD_SET(quiet) THEN print,''
+IF ~KEYWORD_SET(quiet) THEN print,'Setting up spin-tone tweaker matrix coefficients'
+IF ~KEYWORD_SET(quiet) THEN print,''
 
 ; compute mag_y spin tone tweaker coefficients
 
@@ -720,18 +720,18 @@ tw_12=ar31*sin(ph31)
 has_torq=0
 if (calctorq ne 0) then begin
 
-   print,''
-   print,'Calculating torquer coil offsets'
-   print,''
+IF ~KEYWORD_SET(quiet) THEN    print,''
+IF ~KEYWORD_SET(quiet) THEN    print,'Calculating torquer coil offsets'
+IF ~KEYWORD_SET(quiet) THEN    print,''
 
-   has_torq=get_torquer_mag(spinfit,mag,tw,torquer,debug=debug)
+   has_torq=get_torquer_mag(spinfit,mag,tw,torquer,debug=debug,QUIET=quiet)
 
    if (has_torq) then begin
 
-          print,''
-          print,'  tplot,[''TORQ_X'',''TORQ_Y'',''TORQ_Z'']'
-          print,'  to see offsets applied'
-          print,''
+IF ~KEYWORD_SET(quiet) THEN           print,''
+IF ~KEYWORD_SET(quiet) THEN           print,'  tplot,[''TORQ_X'',''TORQ_Y'',''TORQ_Z'']'
+IF ~KEYWORD_SET(quiet) THEN           print,'  to see offsets applied'
+IF ~KEYWORD_SET(quiet) THEN           print,''
 
 ; remove dc coupling terms
 
@@ -756,9 +756,9 @@ endif
 
 ; throw out extrema
 
-print,''
-print,'Setting up DC coupling tweaker matrix'
-print,''
+IF ~KEYWORD_SET(quiet) THEN print,''
+IF ~KEYWORD_SET(quiet) THEN print,'Setting up DC coupling tweaker matrix'
+IF ~KEYWORD_SET(quiet) THEN print,''
 
 z_q=get_quartiles(spinfit.bz_dc)
 y_q=get_quartiles(spinfit.by_dc)
@@ -830,11 +830,11 @@ o_1 = a0
 
 ; Tweaker Gain Matrix and offset
 
-print,''
-print,'In calculating new coupling matrix it is assumed that the '
-print,'following tweaker matrix is a first order correction for'
-print,'off-diagonal terms'
-print,' '
+IF ~KEYWORD_SET(quiet) THEN print,''
+IF ~KEYWORD_SET(quiet) THEN print,'In calculating new coupling matrix it is assumed that the '
+IF ~KEYWORD_SET(quiet) THEN print,'following tweaker matrix is a first order correction for'
+IF ~KEYWORD_SET(quiet) THEN print,'off-diagonal terms'
+IF ~KEYWORD_SET(quiet) THEN print,' '
 
 tw_00=1.
 tw_22=1.
@@ -856,10 +856,10 @@ ofst_new(0)=o_0
 ofst_new(1)=o_1
 ofst_new(2)=o_2
 
-print,tw_new(*,0),format='(f9.6,3x,f9.6,3x,f9.6)'
-print,tw_new(*,1),format='(f9.6,3x,f9.6,3x,f9.6)'
-print,tw_new(*,2),format='(f9.6,3x,f9.6,3x,f9.6)'
-print,''
+IF ~KEYWORD_SET(quiet) THEN print,tw_new(*,0),format='(f9.6,3x,f9.6,3x,f9.6)'
+IF ~KEYWORD_SET(quiet) THEN print,tw_new(*,1),format='(f9.6,3x,f9.6,3x,f9.6)'
+IF ~KEYWORD_SET(quiet) THEN print,tw_new(*,2),format='(f9.6,3x,f9.6,3x,f9.6)'
+IF ~KEYWORD_SET(quiet) THEN print,''
 
 
 ; New gain matrix and offsets
@@ -904,12 +904,12 @@ tw_mat = {t:mag.t(0),tw_new:tw_new,ofst_new:ofst_new}
 
 ; recompute spin tone terms
 
-print,''
-print,'Computing "on-the-fly" Tweaker Coefficients - Be Patient'
-print,''
+IF ~KEYWORD_SET(quiet) THEN print,''
+IF ~KEYWORD_SET(quiet) THEN print,'Computing "on-the-fly" Tweaker Coefficients - Be Patient'
+IF ~KEYWORD_SET(quiet) THEN print,''
 BB = [[magx],[magy],[magz]]
 time=mag.t-mag.t(0)
-spin_tone_fit,BB,time,coef,tspin,ttag,bfit=bfit
+spin_tone_fit,BB,time,coef,tspin,ttag,bfit=bfit,QUIET=quiet
 
 ; STEP 7
 
@@ -918,9 +918,9 @@ spin_tone_fit,BB,time,coef,tspin,ttag,bfit=bfit
 ; Orbit 5154 is a good test case - the harmonic removal is worse
 ; than leaving alone for parts of the orbit.
 
-print,''
-print,'Removing Spin-tone harmonics - under development'
-print,''
+IF ~KEYWORD_SET(quiet) THEN print,''
+IF ~KEYWORD_SET(quiet) THEN print,'Removing Spin-tone harmonics - under development'
+IF ~KEYWORD_SET(quiet) THEN print,''
  
 if (develop) then store_data,'BDATA',data={x:mag.t,y:BB}
 if (develop) then store_data,'BFIT',data={x:mag.t,y:bfit}
@@ -1029,9 +1029,9 @@ checkfit.time=checkfit.time+checkfit.spin
 
 ; get spin-tone tweakers and offsets
 
-print,''
-print,'Final fix with on the fly tweakers'
-print,''
+IF ~KEYWORD_SET(quiet) THEN print,''
+IF ~KEYWORD_SET(quiet) THEN print,'Final fix with on the fly tweakers'
+IF ~KEYWORD_SET(quiet) THEN print,''
 
 tw_zx = tweaker_coeff_fit(-checkfit.bz_bx*cos(checkfit.phase_bz),checkfit.time,mag.t)
 tw_zy = tweaker_coeff_fit( checkfit.bz_bx*sin(checkfit.phase_bz),checkfit.time,mag.t)
@@ -1082,9 +1082,9 @@ magx=0.
 magy=0.
 magz=0.
 
-print,''
-print,'Despinning the magnetometer data'
-print,''
+IF ~KEYWORD_SET(quiet) THEN print,''
+IF ~KEYWORD_SET(quiet) THEN print,'Despinning the magnetometer data'
+IF ~KEYWORD_SET(quiet) THEN print,''
 
 ; STEP 9
 
@@ -1100,9 +1100,9 @@ bz_sc=bz_sp
 
 ; force patch of the nadir data - get orbit and attitude predict
 
-print,''
-print,'Getting orbit data'
-print,''
+IF ~KEYWORD_SET(quiet) THEN print,''
+IF ~KEYWORD_SET(quiet) THEN print,'Getting orbit data'
+IF ~KEYWORD_SET(quiet) THEN print,''
 
 ; for backwards compatability set orbit data tags
 
@@ -1233,7 +1233,7 @@ exp_dec=fdfpre_dec
 ; patch the spin phase data - note using corrected RA & DEC doesn't help eclipse
 
 spin_phase = patch_spin_phase(phase_data,exp_ra,exp_dec, $
-no_patch=no_patch,force_patch=force_patch,no_model=no_model,no_query=no_query)
+no_patch=no_patch,force_patch=force_patch,no_model=no_model,no_query=no_query,QUIET=quiet)
          
 ;  force spin_zero monotonic 
 
@@ -1274,7 +1274,7 @@ last_clock_tmp=next_clock
 frq={x:spin_zero,y:360.d0/spin_per}
 phs={x:spin_zero,y:spin_phase}
 
-fix_up_spin,frq,phs,time_error=time_error,flags=flags,debug=debug,no_query=no_query,is_sun=is_sun
+fix_up_spin,frq,phs,time_error=time_error,flags=flags,debug=debug,no_query=no_query,is_sun=is_sun,QUIET=quiet
 
 flags = flags + 8*patch
 
@@ -1544,9 +1544,9 @@ endif
 
 if (no_model ne 0) then begin
 
-   print,''
-   print,'Getting orbit data'
-   print,''
+IF ~KEYWORD_SET(quiet) THEN    print,''
+IF ~KEYWORD_SET(quiet) THEN    print,'Getting orbit data'
+IF ~KEYWORD_SET(quiet) THEN    print,''
    get_fa_orbit,t1,t2,/all,status=no_model,delta=1.,/definitive,/drag_prop
    if (old_igrf eq 0) then get_new_igrf,no_store_old=no_store_old,use_igrf7=use_igrf7
 
@@ -1554,9 +1554,9 @@ endif
 
 if no_model eq 0 then begin
 
-    print,''
-    print,'Calculating Spin-axis pointing from model field'
-    print,''
+IF ~KEYWORD_SET(quiet) THEN     print,''
+IF ~KEYWORD_SET(quiet) THEN     print,'Calculating Spin-axis pointing from model field'
+IF ~KEYWORD_SET(quiet) THEN     print,''
 
     get_data,'ORBIT',data=orb
     nn = n_elements(orb.y)/2
@@ -1706,9 +1706,9 @@ if no_model eq 0 then begin
 
 ;   Tweak of spin-axis pointing
 
-    print,''
-    print,'Tweak of spin-axis pointing'
-    print,''
+IF ~KEYWORD_SET(quiet) THEN     print,''
+IF ~KEYWORD_SET(quiet) THEN     print,'Tweak of spin-axis pointing'
+IF ~KEYWORD_SET(quiet) THEN     print,''
 
     y2=spl_init(bz_sc.x-bz_sc.x(0),bz_sc.y,/double)
 
@@ -1829,9 +1829,9 @@ if no_model eq 0 then begin
     print,'Expected spin axis RA & DEC: ',exp_ra,exp_dec
     if (abs(dev_ra) gt 1.d0 or abs(dev_dec) gt 1.d0) then print, $
     'WARNING - more than one degree deviation - check results'+bell
-    print,''
-    print,'Constructing sc_to_gei rotation matrix'
-    print,''
+IF ~KEYWORD_SET(quiet) THEN     print,''
+IF ~KEYWORD_SET(quiet) THEN     print,'Constructing sc_to_gei rotation matrix'
+IF ~KEYWORD_SET(quiet) THEN     print,''
 
     spin_axis={ra:ra,dec:dec,ra_f:ra_f,dec_f:dec_f,ra_fdf:exp_ra,dec_fdf:exp_dec,ra_d:dphi_sc,dec_d:-dthe_sc}
  
@@ -1872,9 +1872,9 @@ if no_model eq 0 then begin
 
 ;   STEP 12
 
-    print,''
-    print,'Rotating model field to spacecraft coordinates'
-    print,''
+IF ~KEYWORD_SET(quiet) THEN     print,''
+IF ~KEYWORD_SET(quiet) THEN     print,'Rotating model field to spacecraft coordinates'
+IF ~KEYWORD_SET(quiet) THEN     print,''
 
     bm_sc=bm.y
     n_b = n_elements(bm.y(*,0))
@@ -1884,9 +1884,9 @@ if no_model eq 0 then begin
 
 ;   interpolate model to data - perform outlier rejection
 
-    print,''
-    print,'Interpolating model field and rejecting outliers'
-    print,''
+IF ~KEYWORD_SET(quiet) THEN     print,''
+IF ~KEYWORD_SET(quiet) THEN     print,'Interpolating model field and rejecting outliers'
+IF ~KEYWORD_SET(quiet) THEN     print,''
 
     b=where(finite(bm_sc(*,0)))
     y2=spl_init(bm.x(b)-bm.x(0),bm_sc(b,0),/double)
@@ -2052,9 +2052,9 @@ if no_model eq 0 then begin
 
 ;   rotate spin plane data to minimize phase difference
 
-    print,''
-    print,'Calculating spin plane rotation'
-    print,''
+IF ~KEYWORD_SET(quiet) THEN     print,''
+IF ~KEYWORD_SET(quiet) THEN     print,'Calculating spin plane rotation'
+IF ~KEYWORD_SET(quiet) THEN     print,''
 
     phi_m = atan(bmy_int,bmx_int)*180.d0/!dpi
     phi_b = atan(by_sc.y,bx_sc.y)*180.d0/!dpi
@@ -2145,9 +2145,9 @@ if no_model eq 0 then begin
 ;   Final attitude adjustments
 ;   for safety's sake, assume first tweak wasn't done
 
-    print,''
-    print,'Final attitude adjustments'
-    print,''
+IF ~KEYWORD_SET(quiet) THEN     print,''
+IF ~KEYWORD_SET(quiet) THEN     print,'Final attitude adjustments'
+IF ~KEYWORD_SET(quiet) THEN     print,''
 
     get_data,'B_model',data=bm    
     the_sun=get_sun_ra_dec(bm.x)
@@ -2396,9 +2396,9 @@ if no_model eq 0 then begin
 
 ;   Get delta-B's in spacecraft coordinates
 
-    print,''
-    print,"Getting Delta-B's in spacecraft coordinates"
-    print,''
+IF ~KEYWORD_SET(quiet) THEN     print,''
+IF ~KEYWORD_SET(quiet) THEN     print,"Getting Delta-B's in spacecraft coordinates"
+IF ~KEYWORD_SET(quiet) THEN     print,''
 
     store_data,'dB_sc', $
     data={x:bz_sc.x,y:[[bx_sc.y-bmx_int],[by_sc.y-bmy_int],[bz_sc.y-bmz_int]]}
@@ -2422,9 +2422,9 @@ if no_model eq 0 then begin
 
     get_data,'dB_sc',data=db_sc
 
-    print,''
-    print,"Getting Delta-B's in GEI coordinates"
-    print,''
+IF ~KEYWORD_SET(quiet) THEN     print,''
+IF ~KEYWORD_SET(quiet) THEN     print,"Getting Delta-B's in GEI coordinates"
+IF ~KEYWORD_SET(quiet) THEN     print,''
 
     b_gei={x:bx_sc.x,y:[[bx_sc.y],[by_sc.y],[bz_sc.y]]}
     b_sc=b_gei
@@ -2457,9 +2457,9 @@ if no_model eq 0 then begin
         next_clock-last_clock_tmp,' seconds'
     last_clock_tmp=next_clock
 
-    print,''
-    print,"Getting Delta-B's in SM coordinates"
-    print,''
+IF ~KEYWORD_SET(quiet) THEN     print,''
+IF ~KEYWORD_SET(quiet) THEN     print,"Getting Delta-B's in SM coordinates"
+IF ~KEYWORD_SET(quiet) THEN     print,''
 
     tref=.5d0*(the_sun.time(0)+the_sun.time(n_elements(the_sun.time)-1L))
     igrf_dip=set_dipole_orient(tref,use_igrf7=use_igrf7)
@@ -2519,9 +2519,9 @@ if no_model eq 0 then begin
         next_clock-last_clock_tmp,' seconds'
     last_clock_tmp=next_clock
 
-    print,''
-    print,"Getting Delta-B's in field-aligned coordinates"
-    print,''
+IF ~KEYWORD_SET(quiet) THEN     print,''
+IF ~KEYWORD_SET(quiet) THEN     print,"Getting Delta-B's in field-aligned coordinates"
+IF ~KEYWORD_SET(quiet) THEN     print,''
 
     get_data,'fa_pos',data=fa_pos
 ;   fa_pos_gei={x:fa_pos.x(bmark),y:fa_pos.y(bmark,*)} ; don't use bmark - V3.8
@@ -2577,9 +2577,9 @@ if no_model eq 0 then begin
 ;   delta-b's in velocity vector-ordered FAC's
 ;   Code courtesy of John Bonnell plus slight modifications
 
-    print,''
-    print,"Getting Delta-B's in field-aligned, velocity-based coordinates"
-    print,''
+IF ~KEYWORD_SET(quiet) THEN     print,''
+IF ~KEYWORD_SET(quiet) THEN     print,"Getting Delta-B's in field-aligned, velocity-based coordinates"
+IF ~KEYWORD_SET(quiet) THEN     print,''
 
     get_data,'fa_vel',data=fa_vel
 ;   fa_vel_gei={x:fa_vel.x[bmark],y:fa_vel.y[bmark,*]} ; don't use bmark - V3.8
