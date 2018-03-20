@@ -62,13 +62,15 @@
 FUNCTION time_to_str, secin, FMT=fmt, MSEC = msec, dateonly=dateonly, $
                       CONV_TO_UNDERSCORE=conv_to_underscore
 
+  COMPILE_OPT IDL2,STRICTARRSUBS
+
 ; make sure there are some elements in secin
 
    IF N_ELEMENTS (secin) EQ 0 THEN     RETURN, 'ERROR'
    
 ; check for validity of input (all input values GE 0.)
 
-   IF (WHERE(secin LT 0.))(0) NE -1 THEN    RETURN, 'ERROR' 
+   IF (WHERE(secin LT 0.))[0] NE -1 THEN    RETURN, 'ERROR' 
 
 ; set date/time delimiter
    
