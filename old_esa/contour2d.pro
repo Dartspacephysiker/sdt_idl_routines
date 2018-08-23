@@ -102,12 +102,12 @@ ztitle = data3d.units_name
 
 nenergy = data3d.nenergy
 nbins = data3d.nbins
-ydat = data3d.theta
-zdat = data3d.data
+ydat = data3d.theta[0:nenergy-1,0:nbins-1]
+zdat = data3d.data[0:nenergy-1,0:nbins-1]
 
 str_element,limits,'velocity',value=vel
 if keyword_set(vel) then begin
-    xdat = velocity(data3d.energy,data3d.mass)
+    xdat = velocity(data3d.energy[0:nenergy-1,0:nbins-1],data3d.mass)
     if keyword_set(polar) then begin
         if not keyword_set(ytitle) then ytitle = 'Perp. Velocity (km/s)'
         if not keyword_set(xtitle) then xtitle = 'Para. Velocity (km/s)'
@@ -116,7 +116,7 @@ if keyword_set(vel) then begin
         if not keyword_set(xtitle) then xtitle = 'Velocity (km/s)'
     endelse
 endif else begin
-    xdat = data3d.energy
+    xdat = data3d.energy[0:nenergy-1,0:nbins-1]
     if keyword_set(polar) then begin
         xdat = alog10(xdat)
         if not keyword_set(ytitle) then ytitle = 'Log Perp. Energy (eV)'
