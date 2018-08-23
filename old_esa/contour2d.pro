@@ -73,7 +73,8 @@ pro contour2d,tempdat,   $
 	LAB_0 = lab_0, $
         OVERPLOT = overplot, $
 	XMARGIN = xmargin, $
-	YMARGIN = ymargin
+	YMARGIN = ymargin, $
+        THICK = thick
 
 if data_type(tempdat) ne 8 or tempdat.valid eq 0 then begin
     print,'Invalid Data'
@@ -358,7 +359,7 @@ if keyword_set(polar) then begin
       ytitle=ytitle, c_colors=c_colors, levels=levels, fill=fill, $
       xrange=xrange, yrange=yrange, ystyle=ystyle, xstyle=xstyle, $
       xmargin=xmargin,ymargin=ymargin, $
-      overplot=overplot
+      overplot=overplot,THICK=thick
 
 endif else begin
 
@@ -373,12 +374,14 @@ endif else begin
           c_colors=c_colors, levels=levels, yrange=xrange, ystyle=xstyle, $
           ylog=xlog, xrange=yrange, xstyle=ystyle, xlog=ylog, $
 	  fill=fill, xmargin=xmargin, ymargin=ymargin, xticks=yticks, xtickv=ytickv, $
+          THICK=thick, $
           overplot=overplot
     endif else begin
         contour, zdat, xdat, ydat, title=title, xtitle=xtitle, ytitle=ytitle, $
           c_colors=c_colors, levels=levels, yrange=yrange, ystyle=ystyle, $
           ylog=ylog, xrange=xrange, xstyle=xstyle, xlog=xlog, $
           fill=fill, xmargin=xmargin, ymargin=ymargin, yticks=yticks, ytickv=ytickv, $
+          THICK=thick, $
           overplot=overplot
     endelse
 endelse
