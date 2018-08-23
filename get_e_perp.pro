@@ -21,6 +21,8 @@
 ;
 ;CREATED BY:	Kyoung-joo Hwang, Kristina A. Lynch, Bill Peria
 ;VERSION:	1
+;LAST MODIFICATION:  2018/07/30 (SMH, swapped out CONGRID for DATA_CUT to get tSeries right)
+;                               (SMH, added SURVEY kw)
 ;LAST MODIFICATION:  2004/08/10
 ;
 ;EXAMPLE)
@@ -29,10 +31,10 @@
 ;   you should get a plot that looks like 'getEperp750.ps'
 ;
 
-pro get_e_perp, tt1, tt2, NO_PLOT = no_plot
+pro get_e_perp, tt1, tt2, NO_PLOT = no_plot,SURVEY=survey
 
 device, decomposed = 0, retain = 2
-loadct2,13
+loadct2,43
 
 me = 9.11e-31         ;;; electron mass [kg]
 mi = 16*1.67e-27      ;;; for Oxygen ion
@@ -47,19 +49,21 @@ tvd=dblarr(1)
 ivdrift=0
 time=gettime(tt1)
 
+func = KEYWORD_SET(survey) ? "get_fa_ies_c" : "get_fa_ieb_c"
+
 while time lt gettime(tt2) do begin
-ies = get_fa_ieb_c(time,/advance)
+ies = CALL_FUNCTION(func,time,/advance)
 ies = conv_units(ies,'counts')
 ies.data = ies.data > 1
 if (min(ies.data) eq 1) then ies.data(where(ies.data eq 1)) = !values.f_nan
 ies = conv_units(ies,'df')
 iesvprp = ies.data*0.0
 iesvpar = ies.data*0.0
-iesvvv = sqrt(ies.energy*1.6e-19*2/mi)     
+iesvvv = sqrt(ies.energy*1.6e-19*2./mi)     
 iesvprp = iesvvv*sin(ies.theta*!dtor)
 iesvpar = iesvvv*cos(ies.theta*!dtor)
 
-d3v = sqrt(ies.energy)*ies.denergy*abs(sin(ies.theta/57.3))*ies.dtheta
+d3v = sqrt(ies.energy)*ies.denergy*abs(sin(ies.theta/57.29578))*ies.dtheta
 vdriftok = where(ies.data eq ies.data and ies.denergy ne 0)
 newvdrift =                         $
         total(iesvprp(vdriftok)*ies.data(vdriftok)*d3v(vdriftok))/   $
@@ -85,6 +89,9 @@ get_fa_orbit, tvd, n_elements(tvd), /time_array, /no_store, struc=orb, /all, /de
 bbbalt = sqrt(total(orb.B_model^2,2))    ;;;;; in nT
 v_sc = sqrt(total(orb.fa_vel^2,2))       ;;;;; in km/s
 
+ntimes = n_elements(tvd[1:*])
+orbit = orb.orbit[ntimes]
+
 store_data,'-v_scXb',data={x:tvd,y:(-0.*vdrift-v_sc*1000.)*bbbalt*1.e-6}
 options,'-v_scXb','color',100   ;;; blue
 
@@ -103,7 +110,7 @@ store_data,'eav',data={x:ealongv.x,y:ealongv.y}
 
 ;;;;;;; Averaging eav data corresponding to the time scale of eion 
 
-binsize = (tvd[1:*]-tvd)[n_elements(tvd[1:*])/2]
+binsize = (tvd[1:*]-tvd)[ntimes/2]
 ;bmean, ealongv.x, ealongv.y, BINSIZE=binsize, /no_plot, xb=bins, bme=eavmean
 bmean, ealongv.x, ealongv.y, BINSIZE=binsize, /no_plot, xbins=bins, bmean=eavmean
 store_data, 'sm_eav', data={x:bins, y:eavmean}
@@ -123,7 +130,7 @@ unitv_fperp = normn3(crossn3(orb.B_model, unitQ))           ;;; x-axis
 ;;;         (1)  <== from ealongv/B, i.e., eavmean [mV/m]  
 ;;;         (2)  <== from v_drift from ion distribution fn.  therefore you already get these (1) and (2).
 ;;; v_drift = (East_comp)*unitE + (North_comp)*unitN
-;;;
+;;
 ;;; E_ion = - v_drift X B = B*(v_drift dot unitQ)*(unitB X unitQ) + B*(v_drift dot unitv_fperp)*(unitB X unitv_fperp)
 ;;;                                               -------------- unitv_fperp                     ------------ - unitQ
 ;;; East_comp = unitE (dot) E_ion
@@ -139,7 +146,8 @@ unitz = MAKE_ARRAY(n_elements(tvd),VALUE=1.0D,/DOUBLE) # TRANSPOSE(z)
 unitE = normn3(crossn3(unitz, unitR))             ;;; East unit vector
 unitN = normn3(crossn3(unitR, unitE))             ;;; North unit vector 
 
-eavmean = congrid(eavmean, n_elements(tvd))
+;; eavmean = congrid(eavmean, n_elements(tvd))
+eavmean = DATA_CUT({x:bins,y:eavmean},tvd)
 viondrift = vdrift+v_sc*1000.0
 
 Enorth = eavmean*total(unitN*unitv_fperp,2) - bbbalt*viondrift*total(unitN*unitQ,2)*1.e-6     ;;; in mV/m
@@ -172,11 +180,16 @@ if not keyword_set(no_plot) then begin
    t1Zoom = tt1
    t2Zoom = tt2
 
-   t1Str = '1997-02-01/09:26:40'
-   t2Str = '1997-02-01/09:27:10'
-   t1Zoom = STR_TO_TIME(t1Str)
-   t2Zoom = STR_TO_TIME(t2Str)
+   IF orbit EQ 1750 THEN BEGIN
+      ;; t1Str = '1997-02-01/09:26:40'
+      ;; t2Str = '1997-02-01/09:27:10'
+      t1Str = '1997-01-30/06:41:01'
+      t2Str = '1997-01-30/06:41:13'
+      t1Zoom = STR_TO_TIME(t1Str)
+      t2Zoom = STR_TO_TIME(t2Str)
+   ENDIF
    
+   WINDOW,XSIZE=1100,YSIZE=650
 
    tplot,['-v_ixb','eav','Eeast,Enorth(red)'],TRANGE=[t1Zoom,t2Zoom]
 

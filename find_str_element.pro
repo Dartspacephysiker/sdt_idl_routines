@@ -23,7 +23,7 @@ if data_type(struct) ne 8 then return,-2
 tags = tag_names(struct)
 n = where(strupcase(name) eq tags,count)
 if count eq 0 then return, -1
-i = n(0)
+i = n[0]
 value = struct.(i)
 return,i
 end
