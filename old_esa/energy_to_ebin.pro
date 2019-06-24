@@ -26,14 +26,14 @@ if keyword_set(bin2) then bin=bin2
 endim=dimen1(en)
 if endim eq 0 then begin
 	if not keyword_set(bin2) then bin=0
-	energy=reform(dat.energy(*,bin))
+	energy=reform(dat.energy(0:dat.nEnergy-1,bin))
 	tmp=min((energy-en)^2,ebin)
 	return,ebin
 endif else begin
 	ebin=intarr(endim)
 	if not keyword_set(bin2) then bin=intarr(endim)
 	for a=0,endim-1 do begin
-		energy = reform(dat.energy(*,bin(a)))
+		energy = reform(dat.energy(0:dat.nEnergy-1,bin(a)))
 		tmp=min((energy-en(a))^2,eb)
 		ebin(a)=eb
 	endfor

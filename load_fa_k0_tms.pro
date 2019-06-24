@@ -60,6 +60,7 @@ pro load_fa_k0_tms, $
 	dir = dir, $
 	environvar = environvar, $
 	trange = trange, $
+        no_index_file = no_index_file, $
 	indexfile = indexfile, $
 	orbit = orbit, $
 	var=var, $
@@ -99,11 +100,38 @@ if not keyword_set(filenames) then begin
 		endelse
 	endif else begin
 		if keyword_set(trange) then begin
-			if not keyword_set(indexfile) then begin
-				indexfiledir = getenv('CDF_INDEX_DIR')
-				mfile = indexfiledir+'/fa_k0_tms_files'
-			endif else mfile = indexfile
-			get_file_names,filenames,TIME_RANGE=trange,MASTERFILE=mfile
+                   IF KEYWORD_SET(no_index_file) THEN BEGIN
+                              
+                      tR = time_double(trange)
+                      GET_FA_ORBIT,tR[0],tR[1],delta_t=10,struc=struc
+                      minOrb = min(struc.orbit)
+                      maxOrb = max(struc.orbit)
+                      filenames = MAKE_ARRAY(maxOrb-minOrb+1,/STRING)
+                      cnt = 0
+                      indir = '/SPENCEdata/software/sdt/batch_jobs/TEAMS/'
+                      fPref = 'fa_tms_'
+                      FOR orb=minOrb,maxOrb DO BEGIN
+                         filename = indir+fPref+string(FORMAT='(I0)',orb)+'.cdf'
+                         IF FILE_TEST(filename) THEN BEGIN
+                            filenames[cnt] = filename
+                            cnt++
+                         ENDIF ELSE BEGIN
+                            print,FORMAT='("Couldnt get ",A0,"!")',filename
+                         ENDELSE
+                      ENDFOR
+
+                      filenames = filenames[0:(cnt-1)]
+                      print,filenames
+
+                      ;; STOP
+
+                   ENDIF ELSE BEGIN
+                      if not keyword_set(indexfile) then begin
+                         indexfiledir = getenv('CDF_INDEX_DIR')
+                         mfile = indexfiledir+'/fa_k0_tms_files'
+                      endif else mfile = indexfile
+                      get_file_names,filenames,TIME_RANGE=trange,MASTERFILE=mfile
+                   ENDELSE
 		endif
 	endelse
 endif else begin

@@ -154,8 +154,14 @@ if (dat.valid eq 1) then begin
 	if nvar gt nmax then nmax = nvar
 	time(n)   = (dat.time+dat.end_time)/2.
 	if ind(0) ne -1 then begin
-		data(n,0:nvar-1) = total( dat.data(*,ind), 2)/norm
-		var(n,0:nvar-1) = total( dat.energy(*,ind), 2)/count
+           IF ndimen(dat.data(*,ind)) GT 1 THEN BEGIN
+              data(n,0:nvar-1) = total( dat.data(*,ind), 2)/norm
+              var(n,0:nvar-1) = total( dat.energy(*,ind), 2)/count
+           ENDIF ELSE BEGIN
+              data(n,0:nvar-1) = dat.data(*,ind)/norm
+              var(n,0:nvar-1) = dat.energy(*,ind)/count
+           ENDELSE
+
 	endif else begin
 		data(n,0:nvar-1) = 0
 		var(n,0:nvar-1) = total( dat.energy(*,0), 2)

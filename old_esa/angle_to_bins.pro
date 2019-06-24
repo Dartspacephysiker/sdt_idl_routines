@@ -39,7 +39,7 @@ if ndimen(an) le 1 then begin
 		print,'Error in angle_to_bins: dimen1(an) must equal 2'
 		return,!values.f_nan
 	endif else begin
-		theta = reform(dat.theta(ebin,*))
+		theta = reform(dat.theta(ebin,0:dat.nBins-1))
 		theta = 360.*(theta/360.-floor(theta/360.))
 		th = 360.*(an/360.-floor(an/360.))
 		if th(0) lt th(1) then begin
@@ -62,13 +62,13 @@ endif else begin
 		print,'Error in angle_to_bins: dimen1(an) must equal 2'
 		return,!values.f_nan
 	endif else begin
-		theta = reform(dat.theta(ebin,*))
+		theta = reform(dat.theta(ebin,0:dat.nBins-1))
 		th = reform(an(*,0))
 		if th(0) gt th(1) or th(0) lt -90. or th(1) gt 90. then begin
 			print,'Error in angle_to_bins: -90. <= theta <= 90.'
 			return,!values.f_nan
 		endif
-		phi   = reform(dat.phi(ebin,*))
+		phi   = reform(dat.phi(ebin,0:dat.nBins-1))
 		phi   = 360.*(phi/360.-floor(phi/360.))
 		ph = reform(an(*,1))
 		ph = 360.*(ph/360.-floor(ph/360.))
