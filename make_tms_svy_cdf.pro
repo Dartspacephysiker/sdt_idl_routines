@@ -59,7 +59,7 @@ else no_data = 0
 
    darr = [1.d, 1.d, 1.d]
    cdfdat0 = {time:dat.time, delta_time:dat.integ_t, data:data,$
-              energy:energy, theta:theta, phi:phi, n_energy:nenergy, n_angle:nbins,$
+              energy:energy, theta:theta, phi:phi, nenergy:nenergy, nbins:nbins,$
               fa_pos:darr, fa_vel:darr, alt:1.d, ilat:1.d, mlt:1.d, orbit:3l,$
               b_model:darr, b_foot:darr, foot_lat:1.d, foot_lng:1.d, $ ;20190624 previously didn't include fa_spin_ra,fa_spin_dec
               fa_spin_ra:1.d,fa_spin_dec:1.d}
@@ -105,13 +105,17 @@ else no_data = 0
                   dat = call_function(routine,t,/calib,/ad)
                endfor
             endif else begin
-               while dat.time lt last_time + 7.5 do begin
+               while (dat.time lt last_time + 7.5) do begin
                   dat = call_function(routine,t,/calib,/ad)
                endwhile
             endelse
          endif
          
 ; Test for data gaps and add NAN if gaps are present.
+         ;; IF ~dat.valid THEN stop
+         str_element,dat,'time',success=s
+         IF ~s THEN CONTINUE
+
          if abs((dat.time+dat.end_time)/2. - last_time) ge gap_time then begin
             if n ge 2 then dbadtime = cdfdat(n-1).time - cdfdat(n-2).time else dbadtime = gap_time/2.
             cdfdat(n).time = (last_time) + dbadtime
@@ -120,8 +124,8 @@ else no_data = 0
             cdfdat(n).energy(*,*) = !values.f_nan
             cdfdat(n).theta(*,*) = !values.f_nan
             cdfdat(n).phi(*,*) = !values.f_nan
-            cdfdat(n).n_energy = !values.f_nan
-            cdfdat(n).n_angle = !values.f_nan
+            cdfdat(n).nenergy = !values.f_nan
+            cdfdat(n).nbins = !values.f_nan
 
             IF KEYWORD_SET(all) THEN BEGIN
 
@@ -154,8 +158,8 @@ else no_data = 0
                cdfdat(n).energy(*,*) = !values.f_nan
                cdfdat(n).theta(*,*) = !values.f_nan
                cdfdat(n).phi(*,*) = !values.f_nan
-               cdfdat(n).n_energy = !values.f_nan
-               cdfdat(n).n_angle = !values.f_nan
+               cdfdat(n).nenergy = !values.f_nan
+               cdfdat(n).nbins = !values.f_nan
 
                IF KEYWORD_SET(all) THEN BEGIN
 
@@ -217,8 +221,8 @@ else no_data = 0
          cdfdat(n).energy(*,*) = energy
          cdfdat(n).theta(*,*) = theta
          cdfdat(n).phi(*,*) = phi
-         cdfdat(n).n_energy = nenergy
-         cdfdat(n).n_angle = dat.nbins
+         cdfdat(n).nenergy = nenergy
+         cdfdat(n).nbins = dat.nbins
 
          IF KEYWORD_SET(all) THEN BEGIN
 
@@ -297,16 +301,16 @@ else no_data = 0
 ;	to include attitude data, you must also change the line starting "cdfdat0={ ..."
 ;	to include attitude data, you must also change the line starting "tagsvary=[ ..."
 
-   print, 'Loading the attitude data...'
-   get_fa_attitude, time, /time_array, status=status
-   if status ne 0 then begin
-      print, 'get_fa_attitude failed--returned nonzero status = ', status
-      return
-   endif
-   get_data, 'fa_spin_ra',  data=tmp
-   cdfdat(*).fa_spin_ra=tmp.y(*)
-   get_data, 'fa_spin_dec', data=tmp
-   cdfdat(*).fa_spin_dec=tmp.y(*)
+   ;; print, 'Loading the attitude data...'
+   ;; get_fa_attitude, time, /time_array, status=status
+   ;; if status ne 0 then begin
+   ;;    print, 'get_fa_attitude failed--returned nonzero status = ', status
+   ;;    return
+   ;; endif
+   ;; get_data, 'fa_spin_ra',  data=tmp
+   ;; cdfdat(*).fa_spin_ra=tmp.y(*)
+   ;; get_data, 'fa_spin_dec', data=tmp
+   ;; cdfdat(*).fa_spin_dec=tmp.y(*)
 
 
    IF KEYWORD_SET(return_struct) THEN BEGIN
@@ -318,9 +322,9 @@ else no_data = 0
 
                                 ;makecdf,cdfdat,filename=data_str+'_2d_orbit_'+orbit_num,overwrite=1, $
    makecdf, cdfdat, filename = name, overwrite = 1, $
-            ;; tagsvary=['TIME','Delta_time',units,'energy','theta','phi','n_energy','n_angle', $
+            ;; tagsvary=['TIME','Delta_time',units,'energy','theta','phi','nenergy','nbins', $
             ;; 'fa_pos','fa_vel','ALT','ILAT','MLT','ORBIT','B_model','B_foot','Foot_LAT','Foot_LNG']
-            tagsvary=['TIME','Delta_time',units,'energy','theta','phi','n_energy','n_angle', $
+            tagsvary=['TIME','Delta_time',units,'energy','theta','phi','nenergy','nbins', $
                       'fa_pos','fa_vel','ALT','ILAT','MLT','ORBIT','B_model','B_foot','Foot_LAT','Foot_LNG', $
                       'fa_spin_ra','fa_spin_dec']
 
